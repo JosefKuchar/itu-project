@@ -4,13 +4,23 @@ import { ref } from 'vue'
 import { onMounted, onUnmounted } from 'vue'
 import { Client } from 'boardgame.io/client'
 import Board from '../components/Board.vue'
+import { SocketIO } from 'boardgame.io/multiplayer'
+import { useRoute } from 'vue-router'
+import { computed } from '@vue/reactivity'
+
+const route = useRoute()
+const playerID = computed(() => route.query.id || '0')
 
 const client = ref()
 const unsubscribe = ref()
 const state = ref()
 
 onMounted(() => {
-  client.value = Client({ game: TicTacToe })
+  client.value = Client({
+    game: TicTacToe,
+    multiplayer: SocketIO({ server: 'localhost:8000' }),
+    playerID: playerID.value as string,
+  })
   client.value.start()
   unsubscribe.value = client.value.subscribe((newState: any) => {
     state.value = newState
