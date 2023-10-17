@@ -24,7 +24,14 @@ const updateMatches = () => {
 }
 
 const createMatch = () => {
-  store.lobbyClient.createMatch('checkers', { numPlayers: 2 }).then(updateMatches)
+  store.lobbyClient
+    .createMatch('checkers', {
+      numPlayers: 2,
+      setupData: {
+        matchName: 'Match name' // TODO: Add match name
+      }
+    })
+    .then(updateMatches)
 }
 
 const joinMatch = (matchID: string) => {
@@ -33,7 +40,6 @@ const joinMatch = (matchID: string) => {
       playerName: 'Alice'
     })
     .then((c) => {
-      console.log(c)
       store.$patch({
         playerCredentials: c.playerCredentials,
         playerID: c.playerID,
@@ -53,7 +59,9 @@ const joinMatch = (matchID: string) => {
   <!-- List of matches -->
   <ul>
     <li v-for="match in matches" :key="match.matchID">
-      <button @click="joinMatch(match.matchID)">Join</button>
+      <button @click="joinMatch(match.matchID)">
+        Join {{ match.matchID }} {{ match?.setupData?.matchName }}
+      </button>
     </li>
   </ul>
 </template>
