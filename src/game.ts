@@ -1,4 +1,12 @@
-export const TicTacToe = {
+import type { Game } from 'boardgame.io'
+
+type GameState = {
+  cells: (undefined | string)[]
+}
+
+export const Checkers: Game<GameState> = {
+  name: 'checkers',
+
   setup: () => ({ cells: Array(9).fill(null) }),
 
   turn: {
@@ -7,8 +15,7 @@ export const TicTacToe = {
 
   moves: {
     clickCell: ({ G, playerID }, id) => {
-      G.cells[id] = playerID;
-    },
-  },
-};
-
+      G.cells[id] = playerID
+    }
+  }
+}

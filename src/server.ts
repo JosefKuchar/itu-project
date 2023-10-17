@@ -1,8 +1,8 @@
 import { Server, Origins } from 'boardgame.io/server'
-import { TicTacToe } from './game'
+import { Checkers } from './game'
 
 const server = Server({
-  games: [TicTacToe],
+  games: [Checkers],
   origins: [Origins.LOCALHOST, 'http://127.0.0.1:5173']
 })
 

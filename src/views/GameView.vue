@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TicTacToe } from '../game'
+import { Checkers } from '../game'
 import { ref } from 'vue'
 import { onMounted, onUnmounted } from 'vue'
 import { Client } from 'boardgame.io/client'
@@ -17,7 +17,7 @@ const state = ref()
 
 onMounted(() => {
   client.value = Client({
-    game: TicTacToe,
+    game: Checkers,
     multiplayer: SocketIO({ server: 'localhost:8000' }),
     playerID: playerID.value as string
   })
