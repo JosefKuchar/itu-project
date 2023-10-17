@@ -61,6 +61,8 @@ const joinMatch = (matchID: string) => {
     <li v-for="match in matches" :key="match.matchID">
       <button @click="joinMatch(match.matchID)">
         Join {{ match.matchID }} {{ match?.setupData?.matchName }}
+        {{ match.players.filter((p) => typeof p.isConnected !== 'undefined').length }} /
+        {{ match.players.length }}
       </button>
     </li>
   </ul>
