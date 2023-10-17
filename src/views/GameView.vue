@@ -7,9 +7,10 @@ import Board from '../components/Board.vue'
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { useRoute } from 'vue-router'
 import { computed } from 'vue'
+import { useStore } from '../store'
 
+const store = useStore()
 const route = useRoute()
-const playerID = computed(() => route.query.id || '0')
 
 const client = ref()
 const unsubscribe = ref()
@@ -19,7 +20,9 @@ onMounted(() => {
   client.value = Client({
     game: Checkers,
     multiplayer: SocketIO({ server: 'localhost:8000' }),
-    playerID: playerID.value as string
+    playerID: store.playerID,
+    credentials: store.playerCredentials,
+    matchID: store.matchID
   })
   client.value.start()
   unsubscribe.value = client.value.subscribe((newState: any) => {
