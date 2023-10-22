@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { LobbyAPI } from 'boardgame.io'
-import { onMounted, ref } from 'vue'
+import { type LobbyAPI } from 'boardgame.io'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useStore } from '../store'
 import router from '../router'
 
 const store = useStore()
+const interval = ref()
 
 store.$patch({
   matchID: 'test'
@@ -14,6 +15,11 @@ const matches = ref<LobbyAPI.Match[]>()
 
 onMounted(() => {
   updateMatches()
+  interval.value = setInterval(updateMatches, 1000)
+})
+
+onUnmounted(() => {
+  clearInterval(interval.value)
 })
 
 const updateMatches = () => {
