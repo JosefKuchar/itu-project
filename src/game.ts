@@ -63,7 +63,7 @@ const MOVES = {
  * @param y The y coordinate
  * @returns Index of the cell or null if the coordinates are invalid
  */
-const calculateIndex = (x: number, y: number) => {
+export const calculateIndex = (x: number, y: number) => {
   if (x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE) {
     return null
   }
@@ -75,7 +75,7 @@ const calculateIndex = (x: number, y: number) => {
  * @param index The index of the cell
  * @returns The coordinates of the cell
  */
-const calculateCoordinates = (index: number) => {
+export const calculateCoordinates = (index: number) => {
   return { x: index % BOARD_SIZE, y: Math.floor(index / BOARD_SIZE) }
 }
 
