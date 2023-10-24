@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { type Piece, type GameState, Player } from '../game'
+import { type Piece, type GameState, Player, getValidMoves } from '../game'
 import type { Ctx } from 'boardgame.io'
+import { useStore } from '../store'
 
 type Props = {
   G: GameState
@@ -9,17 +10,10 @@ type Props = {
   moves: any
 }
 
-const lastClick = ref<number | null>(null)
-const props = defineProps<Props>()
+const store = useStore()
 
-const handleClick = (value: number) => {
-  if (lastClick.value === null) {
-    lastClick.value = value
-  } else {
-    props.moves?.movePiece(lastClick.value, value)
-    lastClick.value = null
-  }
-}
+const selectedPiece = ref<number | null>(null)
+const props = defineProps<Props>()
 
 const getTransform = (index?: number) => {
   if (typeof index !== 'number') return ''
@@ -35,6 +29,23 @@ const pieces = computed(
       .filter((cell) => cell.piece !== null)
       .sort((a, b) => a.piece!.id! - b.piece!.id!) as { piece: Piece; index: number }[]
 )
+
+const validMoves = computed(() => {
+  if (props.ctx.currentPlayer !== store.playerID) return []
+  return getValidMoves(props.G, store.playerID)
+})
+
+const handleClick = (value: number) => {
+  if (props.ctx.currentPlayer !== store.playerID) return
+
+  if (selectedPiece.value === null) {
+    if (!validMoves.value.some((move) => move.from === value)) return
+    selectedPiece.value = value
+  } else {
+    props.moves?.movePiece(selectedPiece.value, value)
+    selectedPiece.value = null
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -50,7 +61,7 @@ button {
   font-family: monospace;
 }
 
-.piece {
+.piece-wrapper {
   width: 3rem;
   height: 3rem;
   position: absolute;
@@ -58,7 +69,7 @@ button {
   box-sizing: border-box;
 }
 
-.piece-inner {
+.piece {
   width: 2rem;
   height: 2rem;
   margin: 0.5rem;
@@ -77,11 +88,38 @@ button {
 }
 
 .piece-white {
-  background: #cacaca;
+  background: #aaa;
+}
+
+.piece-white.piece-movable {
+  background: #fff;
 }
 
 .piece-black {
-  background: #333;
+  background: #222;
+}
+
+.piece-black.piece-movable {
+  background: #444;
+}
+
+.piece-cue {
+  background: #5a94f2;
+  width: 1rem;
+  height: 1rem;
+  margin: 1rem;
+  opacity: 0;
+
+  animation: cue 0.2s ease-in-out normal forwards;
+}
+
+@keyframes cue {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>
 
@@ -99,15 +137,26 @@ button {
         v-for="cell in pieces"
         :key="cell.piece?.id"
         :style="`transform: ${getTransform(cell.index)}`"
-        :class="`piece`"
+        class="piece-wrapper"
         @click="handleClick(cell.index)"
       >
         <div
-          :class="`piece-inner ${
-            cell?.piece?.player === Player.White ? 'piece-white' : 'piece-black'
-          } ${cell?.index === lastClick ? 'piece-selected' : ''}`"
+          :class="`piece ${cell?.piece?.player === Player.White ? 'piece-white' : 'piece-black'} ${
+            cell?.index === selectedPiece ? 'piece-selected' : ''
+          } ${validMoves.some((move) => move.from === cell.index) ? 'piece-movable' : ''}`"
         ></div>
       </div>
+      <template v-if="selectedPiece !== null">
+        <div
+          v-for="(valid, index) in validMoves.filter((move) => move.from === selectedPiece)"
+          :key="index"
+          :style="`transform: ${getTransform(valid.to)}`"
+          class="piece-wrapper"
+          @click="handleClick(valid.to)"
+        >
+          <div class="piece piece-cue"></div>
+        </div>
+      </template>
     </div>
   </div>
 </template>

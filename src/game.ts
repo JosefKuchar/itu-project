@@ -140,7 +140,7 @@ const getValidMovesForPiece = (G: GameState, player: Player, index: number) => {
   return moves
 }
 
-const getValidMoves = (G: GameState, playerID: string) => {
+export const getValidMoves = (G: GameState, playerID: string) => {
   const player = playerID === G.whitePlayer ? Player.White : Player.Black
 
   if (G.lastCapturing) {
