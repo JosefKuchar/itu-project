@@ -168,6 +168,7 @@ export const Checkers: Game<GameState> = {
         i--
       }
       cells[i] = { type: PieceType.Pawn, player: Player.White }
+      break
     }
 
     return {
@@ -180,7 +181,6 @@ export const Checkers: Game<GameState> = {
     movePiece: ({ G, playerID, events }, from, to) => {
       // Get valid moves
       const moves = getValidMoves(G, playerID)
-      console.log(moves)
 
       // Check if the move is valid
       const move = moves.find((move) => move.from === from && move.to === to)
@@ -230,6 +230,16 @@ export const Checkers: Game<GameState> = {
 
       // End turn
       events.endTurn()
+    }
+  },
+  turn: {
+    // If there are no valid moves at the start of the turn, end the game
+    onBegin: ({ G, ctx, events }) => {
+      const currentPlayer = ctx.currentPlayer
+      const moves = getValidMoves(G, currentPlayer)
+      if (moves.length === 0) {
+        events.endGame({ winner: currentPlayer === G.whitePlayer ? G.blackPlayer : G.whitePlayer })
+      }
     }
   }
 }
