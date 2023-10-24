@@ -187,7 +187,6 @@ export const Checkers: Game<GameState> = {
         i--
       }
       cells[i] = { type: PieceType.Pawn, player: Player.White }
-      break
     }
 
     return {
