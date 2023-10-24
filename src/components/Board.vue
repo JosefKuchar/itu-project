@@ -16,7 +16,6 @@ const handleClick = (value: number) => {
   if (lastClick.value === null) {
     lastClick.value = value
   } else {
-    console.log(lastClick.value, value)
     props.moves?.movePiece(lastClick.value, value)
     lastClick.value = null
   }
