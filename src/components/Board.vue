@@ -1,38 +1,34 @@
-<template>
-  <div class="board">
-    <div class="grid">
-      <button v-for="(cell, index) in G?.cells" :key="index" @click="moves?.clickCell(index)" :disabled="cell !== null">
-        {{ cell }}
-      </button>
-    </div>
-    <p v-if="winner">{{ winner }}</p>
-  </div>
-</template>
+<script lang="ts" setup>
+import { ref } from 'vue'
+import { type GameState } from '../game'
+import type { Ctx } from 'boardgame.io'
 
-<script lang="ts">
-export default {
-  name: "Board",
-  props: {
-    G: Object,
-    ctx: Object,
-    moves: Object,
-  },
-  computed: {
-    winner() {
-      if (!this.ctx?.gameover) return;
-      if (this.ctx?.gameover.draw) return "Draw";
-      return `Player ${this.ctx.gameover.winner} wins!`;
-    },
-  },
-};
+type Props = {
+  G: GameState
+  ctx: Ctx
+  moves: any
+}
+
+const lastClick = ref<number | null>(null)
+const { G, moves } = defineProps<Props>()
+
+const handleClick = (value: number) => {
+  if (lastClick.value === null) {
+    lastClick.value = value
+  } else {
+    console.log(lastClick.value, value)
+    moves?.movePiece(lastClick.value, value)
+    lastClick.value = null
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 3rem);
-  grid-template-rows: repeat(3, 3rem);
+  grid-template-columns: repeat(8, 3rem);
+  grid-template-rows: repeat(8, 3rem);
   grid-gap: 0.3rem;
 }
 
@@ -42,3 +38,12 @@ button {
 }
 </style>
 
+<template>
+  <div class="board">
+    <div class="grid">
+      <button v-for="(cell, index) in G?.cells" :key="index" @click="handleClick(index)">
+        {{ cell?.player }} | {{ cell?.type }}
+      </button>
+    </div>
+  </div>
+</template>
