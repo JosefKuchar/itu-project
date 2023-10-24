@@ -18,6 +18,7 @@ type Piece = {
   type: PieceType // Type of the piece
   player: Player // Player that owns the piece
   toBeRemoved?: boolean // Whether the piece should be removed after all captures are done
+  id?: number
 }
 
 // Move
@@ -176,7 +177,7 @@ export const Checkers: Game<GameState> = {
       if (i === BOARD_SIZE * 2) {
         i++
       }
-      cells[i] = { type: PieceType.Pawn, player: Player.Black }
+      cells[i] = { type: PieceType.Pawn, player: Player.Black, id: i }
     }
     // White pieces
     for (let i = BOARD_SIZE * (BOARD_SIZE - 3); i < BOARD_SIZE * BOARD_SIZE; i += 2) {
@@ -186,7 +187,7 @@ export const Checkers: Game<GameState> = {
       if (i === BOARD_SIZE * (BOARD_SIZE - 1) + 1) {
         i--
       }
-      cells[i] = { type: PieceType.Pawn, player: Player.White }
+      cells[i] = { type: PieceType.Pawn, player: Player.White, id: i }
     }
 
     return {
