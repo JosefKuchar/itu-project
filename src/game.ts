@@ -1,48 +1,44 @@
 import type { Game } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
+// Piece type
 enum PieceType {
   Pawn,
   King
 }
 
+// Player
 export enum Player {
   White,
   Black
 }
 
+// Piece on the board
 type Piece = {
-  type: PieceType
-  player: Player
-  toBeRemoved?: boolean
+  type: PieceType // Type of the piece
+  player: Player // Player that owns the piece
+  toBeRemoved?: boolean // Whether the piece should be removed after all captures are done
 }
 
-export type GameState = {
-  cells: (null | Piece)[]
-  whitePlayer: string
-  blackPlayer: string
-  lastCapturing?: number
-}
-
+// Move
 export type Move = {
-  from: number
-  to: number
-  captured?: number
+  from: number // Index of the cell to move from
+  to: number // Index of the cell to move to
+  captured?: number // Index of the cell that was captured
 }
 
+// Game state
+export type GameState = {
+  cells: (null | Piece)[] // The board
+  whitePlayer: string // ID of the white player
+  blackPlayer: string // ID of the black player
+  lastCapturing?: number // Index of the last capturing piece
+}
+
+// Board size (8x8)
 const BOARD_SIZE = 8
 
-const calculateIndex = (x: number, y: number) => {
-  if (x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE) {
-    return null
-  }
-  return y * BOARD_SIZE + x
-}
-
-const calculateCoordinates = (index: number) => {
-  return { x: index % BOARD_SIZE, y: Math.floor(index / BOARD_SIZE) }
-}
-
+// Possible moves for each player
 const MOVES = {
   [Player.White]: [
     { x: -1, y: -1 },
@@ -58,6 +54,28 @@ const MOVES = {
     { x: -1, y: 1 },
     { x: 1, y: 1 }
   ]
+}
+
+/**
+ * Calculate the index of a cell from its coordinates
+ * @param x The x coordinate
+ * @param y The y coordinate
+ * @returns Index of the cell or null if the coordinates are invalid
+ */
+const calculateIndex = (x: number, y: number) => {
+  if (x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE) {
+    return null
+  }
+  return y * BOARD_SIZE + x
+}
+
+/**
+ * Calculate the coordinates of a cell from its index
+ * @param index The index of the cell
+ * @returns The coordinates of the cell
+ */
+const calculateCoordinates = (index: number) => {
+  return { x: index % BOARD_SIZE, y: Math.floor(index / BOARD_SIZE) }
 }
 
 const getValidMovesForPiece = (G: GameState, player: Player, index: number) => {
@@ -146,7 +164,8 @@ const getValidMoves = (G: GameState, playerID: string) => {
 
 export const Checkers: Game<GameState> = {
   name: 'checkers',
-
+  disableUndo: true,
+  // Initialize the game's state.
   setup: () => {
     const cells = Array(BOARD_SIZE * BOARD_SIZE).fill(null)
     // Black pieces
@@ -178,6 +197,7 @@ export const Checkers: Game<GameState> = {
     }
   },
   moves: {
+    // Move a piece
     movePiece: ({ G, playerID, events }, from, to) => {
       // Get valid moves
       const moves = getValidMoves(G, playerID)
@@ -233,8 +253,9 @@ export const Checkers: Game<GameState> = {
     }
   },
   turn: {
-    // If there are no valid moves at the start of the turn, end the game
+    // Win condition
     onBegin: ({ G, ctx, events }) => {
+      // If there are no valid moves at the start of the turn, end the game
       const currentPlayer = ctx.currentPlayer
       const moves = getValidMoves(G, currentPlayer)
       if (moves.length === 0) {
