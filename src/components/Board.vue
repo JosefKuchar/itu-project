@@ -68,6 +68,13 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.piece-selected {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0.25rem;
 }
 
 .piece-white {
@@ -93,13 +100,13 @@ button {
         v-for="cell in pieces"
         :key="cell.piece?.id"
         :style="`transform: ${getTransform(cell.index)}`"
-        :class="`piece `"
+        :class="`piece`"
         @click="handleClick(cell.index)"
       >
         <div
           :class="`piece-inner ${
             cell?.piece?.player === Player.White ? 'piece-white' : 'piece-black'
-          }`"
+          } ${cell?.index === lastClick ? 'piece-selected' : ''}`"
         ></div>
       </div>
     </div>
