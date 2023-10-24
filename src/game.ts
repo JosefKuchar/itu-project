@@ -14,7 +14,7 @@ export enum Player {
 }
 
 // Piece on the board
-type Piece = {
+export type Piece = {
   type: PieceType // Type of the piece
   player: Player // Player that owns the piece
   toBeRemoved?: boolean // Whether the piece should be removed after all captures are done
