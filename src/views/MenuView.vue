@@ -24,7 +24,6 @@ const playWithAi = () => {
 </script>
 
 <template>
-  <!-- Button that creates a new match -->
   <div class="flex flex-col gap-y-10">
     <button class="btn btn-primary btn-wide" @click="createMatch">Create match</button>
     <button class="btn btn-primary btn-wide" @click="playWithFriend">Play with a friend</button>

@@ -3,7 +3,6 @@ import router from '@/router';
 import { useStore } from '@/store';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { type LobbyAPI } from 'boardgame.io';
-import { match } from 'assert';
 
 const store = useStore();
 const interval = ref();
