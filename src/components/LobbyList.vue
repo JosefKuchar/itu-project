@@ -3,7 +3,6 @@ import { useStore } from '@/store';
 import { type LobbyAPI } from 'boardgame.io';
 import { ref, onMounted, onUnmounted } from 'vue';
 import router from '@/router';
-import { update } from 'boardgame.io/dist/types/src/core/action-creators';
 
 const store = useStore();
 const interval = ref();
@@ -26,28 +25,23 @@ const updateMatches = () => {
 }
 
 const joinMatch = (matchID: string) => {
-  store.lobbyClient
-    .joinMatch('checkers', matchID, {
-      playerName: 'Alice'
-    })
-    .then((c: any) => {
-      store.$patch({
-        playerCredentials: c.playerCredentials,
-        playerID: c.playerID,
-        matchID
-      })
-      router.push({ path: '/game' })
-
-      // Redirect
-    })
+  store.lobbyClient.getMatch('checkers', matchID).then((m: any) => {
+    store.$patch({
+      matchID: matchID
+    });
+    router.push({ path: '/join-game' });
+  })
+  //TODO: check errors
 }
 </script>
 
 <template>
   <ul>
     <li v-for="match in matches" :key="match.matchID">
-      <span>{{ match.matchID }}</span>
-      <button @click="joinMatch(match.matchID)">Join</button>
+      <div class="flex justify-between my-3">
+        <div class="text-lg">{{ match.setupData.matchName }}</div>
+        <button class="btn btn-ternary btn-sm" @click="joinMatch(match.matchID)">Join</button>
+      </div>
     </li>
   </ul>
 </template>

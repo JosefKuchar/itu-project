@@ -5,7 +5,8 @@ import CreateLobbyView from '@/views/CreateLobbyView.vue'
 import PlayWithFriendView from '@/views/PlayWithFriendView.vue'
 import PlayPublicView from '@/views/PlayPublicView.vue'
 import PlayWithAi from '@/views/PlayWithAi.vue'
-import TmpView from '@/views/TmpView.vue'
+import CreateGameView from '@/views/CreateGameView.vue'
+import JoinGameView from '@/views/JoinGameView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,9 +42,14 @@ const router = createRouter({
       component: MenuView,
     },
     {
-      path: '/tmp',
-      name: 'tmp',
-      component: TmpView,
+      path: '/create-game',
+      name: 'create-game',
+      component: CreateGameView,
+    },
+    {
+      path: '/join-game',
+      name: 'join-game',
+      component: JoinGameView,
     }
   ]
 })

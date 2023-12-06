@@ -1,19 +1,24 @@
 <script setup lang="ts">
 import router from '@/router';
 import { useStore } from '@/store';
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { type LobbyAPI } from 'boardgame.io';
+import { match } from 'assert';
 
 const store = useStore();
 const interval = ref();
 
 const matches = ref<LobbyAPI.Match[]>();
 
-const playerName = ref('');
+const playerName = ref('Anonymous');
 
 onMounted(() => {
   checkMatchState();
   interval.value = setInterval(checkMatchState, 1000);
+})
+
+onUnmounted(() => {
+  clearInterval(interval.value);
 })
 
 const checkMatchState = () => {
@@ -21,16 +26,21 @@ const checkMatchState = () => {
     matches.value = m.matches;
   });
 
-  store.lobbyClient.listMatches('checkers').then((m: any) => {
-    m.matches.filter((match: any) => {
-      if (match.matchID === store.matchID) {
-        console.log(match.players[0].name)
-        // TODO: check better way, also require name
-        if (match.players[0].name != undefined) {
+  store.lobbyClient.getMatch('checkers', store.matchID).then((m: any) => {
+    if (m.players[0].name != undefined) {
+      store.lobbyClient
+        .joinMatch('checkers', m.matchID, {
+          playerName: playerName.value
+        })
+        .then((c: any) => {
+          store.$patch({
+            playerCredentials: c.playerCredentials,
+            playerID: c.playerID,
+            matchID: m.matchID
+          })
           router.push({ path: '/game' })
-        }
-      }
-    })
+        })
+    }
   })
 }
 

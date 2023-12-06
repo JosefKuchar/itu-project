@@ -16,9 +16,6 @@ const playPublic = () => {
   router.push('/play-public')
 }
 
-const playWithBot = () => {
-  router.push('/play-with-ai')
-}
 
 const playWithAi = () => {
   router.push('/play-with-ai')

@@ -40,7 +40,7 @@ const createMatch = () => {
         matchID: response.matchID,
       })
       updateMatches()
-      router.push({ path: '/tmp' })
+      router.push({ path: '/create-game' })
     })
 }
 
@@ -67,7 +67,7 @@ const createMatch = () => {
     <div>
       <div class="card w-96 bg-base-100 shadow-xl">
         <div class="card-body">
-          <h2 class="card-title">Join existing lobby</h2>
+          <h2 class="card-title">Join an existing lobby</h2>
           <LobbyList />
         </div>
       </div>
