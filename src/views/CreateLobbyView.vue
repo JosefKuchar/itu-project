@@ -10,10 +10,6 @@ const interval = ref()
 
 const inputValue = ref('')
 
-store.$patch({
-  matchID: 'test'
-})
-
 const matches = ref<LobbyAPI.Match[]>()
 
 onMounted(() => {
@@ -32,23 +28,19 @@ const updateMatches = () => {
 }
 
 const createMatch = () => {
-  store.$patch({
-    matchName: inputValue.value
-  })
-  console.log(store.matchName)
-  console.log(store.matchID)
   store.lobbyClient
     .createMatch('checkers', {
       numPlayers: 2,
       setupData: {
-        matchName: store.matchName.value
+        matchName: inputValue.value
       }
     })
     .then((response: any) => {
       store.$patch({
-        matchId: response.matchID,
+        matchID: response.matchID,
       })
       updateMatches()
+      router.push({ path: '/tmp' })
     })
 }
 
