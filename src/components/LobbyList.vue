@@ -9,6 +9,13 @@ const interval = ref();
 
 const matches = ref<LobbyAPI.Match[]>();
 
+defineProps({
+  title: {
+    type: String,
+    required: true
+  }
+})
+
 onMounted(() => {
   updateMatches()
   interval.value = setInterval(updateMatches, 1000)
@@ -36,12 +43,17 @@ const joinMatch = (matchID: string) => {
 </script>
 
 <template>
-  <ul>
-    <li v-for="match in matches" :key="match.matchID">
-      <div class="flex justify-between my-3">
-        <div class="text-lg">{{ match.setupData.matchName }}</div>
-        <button class="btn btn-ternary btn-sm" @click="joinMatch(match.matchID)">Join</button>
-      </div>
-    </li>
-  </ul>
+  <div class="card w-96 bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title">{{ title }}</h2>
+      <ul>
+        <li v-for="match in matches" :key="match.matchID">
+          <div class="flex justify-between my-3">
+            <div class="text-lg">{{ match.setupData.matchName }}</div>
+            <button class="btn btn-ternary btn-sm" @click="joinMatch(match.matchID)">Join</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>

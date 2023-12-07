@@ -1,3 +1,9 @@
+<script setup lang="ts">
+
+import LobbyList from "@/components/LobbyList.vue";
+
+</script>
+
 <template>
-    Public
+  <LobbyList :title='"Lobbies"'/>
 </template>

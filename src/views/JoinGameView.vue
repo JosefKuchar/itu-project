@@ -9,10 +9,6 @@ const playerName = ref('');
 const ready = ref(false);
 const interval = ref();
 
-const updatePlayerName = (event: any) => {
-  playerName.value = event.target.value;
-}
-
 onMounted(() => {
   checkIfBothReady();
   interval.value = setInterval(checkIfBothReady, 1000);

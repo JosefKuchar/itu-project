@@ -65,12 +65,7 @@ const createMatch = () => {
       or
     </h2>
     <div>
-      <div class="card w-96 bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Join an existing lobby</h2>
-          <LobbyList />
-        </div>
-      </div>
+      <LobbyList v-bind:title='"Join an existing lobby"'/>
     </div>
   </div>
 </template>
