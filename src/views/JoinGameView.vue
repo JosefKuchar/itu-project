@@ -1,11 +1,12 @@
 <script setup lang="ts">
 
-import { useStore } from '@/store';
+import {useStore} from '@/store';
 import {onMounted, onUnmounted, ref} from 'vue';
 import router from "@/router";
 
 const store = useStore();
 const playerName = ref('');
+const err = ref('');
 const ready = ref(false);
 const interval = ref();
 
@@ -22,7 +23,11 @@ const checkIfBothReady = () => {
   // TODO: How to catch this error?
   store.lobbyClient.getMatch('checkers', store.matchID).then((m: any) => {
     if (m.players[0].name != undefined && m.players[1].name != undefined) {
-      router.push({ path: '/game' })
+      if (store.playerCredentials == '') {
+        err.value = 'Match has already started'
+      } else {
+        router.push({path: '/game'})
+      }
     }
   })
 }
@@ -39,7 +44,17 @@ const changeJoinState = () => {
       })
     })
   } else {
-    store.lobbyClient.leaveMatch('checkers', store.matchID, { playerID: store.playerID, credentials: store.playerCredentials });
+    store.lobbyClient.leaveMatch('checkers', store.matchID, {
+      playerID: store.playerID,
+      credentials: store.playerCredentials
+    })
+        .then(() => {
+          store.$patch({
+            playerCredentials: '',
+            playerID: '',
+            matchID: '',
+          })
+        })
   }
 }
 
@@ -47,13 +62,16 @@ const changeJoinState = () => {
 
 <template>
   <div class="flex flex-col gap-y-3">
-      <div>
-        <div class="label">
-          <span class="label-text">Nickname</span>
-        </div>
-        <input type="text" v-model="playerName" placeholder="Anonymous"
-               class="input input-bordered input-primary w-full max-w-xs" />
+    <div>
+      <div class="label">
+        <span class="label-text">Nickname</span>
       </div>
-    <input type="checkbox" aria-label="Ready" class="btn"  @change="changeJoinState" v-model="ready"/>
+      <input type="text" v-model="playerName" placeholder="Anonymous"
+             class="input input-bordered input-primary w-full max-w-xs"/>
+      <div class="text-error">
+        {{ err }}
+      </div>
+    </div>
+    <input type="checkbox" aria-label="Ready" class="btn" @change="changeJoinState" v-model="ready" v-bind:disabled="err != ''"/>
   </div>
 </template>
