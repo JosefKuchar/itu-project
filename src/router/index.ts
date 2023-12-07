@@ -5,7 +5,6 @@ import CreateLobbyView from '@/views/CreateLobbyView.vue'
 import PlayWithFriendView from '@/views/PlayWithFriendView.vue'
 import PlayPublicView from '@/views/PlayPublicView.vue'
 import PlayWithAi from '@/views/PlayWithAi.vue'
-import CreateGameView from '@/views/CreateGameView.vue'
 import JoinGameView from '@/views/JoinGameView.vue'
 
 const router = createRouter({
@@ -40,11 +39,6 @@ const router = createRouter({
       path: '/',
       name: 'menu',
       component: MenuView,
-    },
-    {
-      path: '/create-game',
-      name: 'create-game',
-      component: CreateGameView,
     },
     {
       path: '/join-game',

@@ -40,7 +40,7 @@ const createMatch = () => {
         matchID: response.matchID,
       })
       updateMatches()
-      router.push({ path: '/create-game' })
+      router.push({ path: '/join-game' })
     })
 }
 

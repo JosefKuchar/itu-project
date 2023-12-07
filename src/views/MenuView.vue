@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { useStore } from '@/store';
 import router from '@/router';
-
-const store = useStore();
 
 const createMatch = () => {
   router.push('/create-lobby')
@@ -16,11 +13,9 @@ const playPublic = () => {
   router.push('/play-public')
 }
 
-
 const playWithAi = () => {
   router.push('/play-with-ai')
 }
-
 </script>
 
 <template>
