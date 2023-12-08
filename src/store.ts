@@ -7,6 +7,7 @@ type StoreState = {
   playerID: string
   matchID: string
   playerName: string
+  lobbyIdentifier: string
 }
 
 export const useStore = defineStore('store', {
@@ -15,6 +16,7 @@ export const useStore = defineStore('store', {
     playerName: '',
     matchID: '',
     playerCredentials: '',
-    playerID: ''
+    playerID: '',
+    lobbyIdentifier: ''
   })
 })

@@ -6,6 +6,7 @@ import PlayWithFriendView from '@/views/PlayWithFriendView.vue'
 import PlayPublicView from '@/views/PlayPublicView.vue'
 import PlayWithAi from '@/views/PlayWithAi.vue'
 import JoinGameView from '@/views/JoinGameView.vue'
+import JoinFriendGameView from "@/views/JoinFriendGameView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/join-game',
       name: 'join-game',
       component: JoinGameView,
+    },
+    {
+      path: '/join-friend-game/:id',
+      name: 'join-friend-game',
+      component: JoinFriendGameView,
     }
   ]
 })

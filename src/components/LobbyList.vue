@@ -27,7 +27,7 @@ onUnmounted(() => {
 
 const updateMatches = () => {
   store.lobbyClient.listMatches('checkers').then((m: any) => {
-    matches.value = m.matches
+    matches.value = m.matches.filter((match: any) => match.setupData.lobbyIdentifier == "")
   })
 }
 

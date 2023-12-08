@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import router from "@/router";
 import {useStore} from "@/store";
 
@@ -12,6 +12,7 @@ const createMatch = () => {
       .createMatch('checkers', {
         numPlayers: 2,
         setupData: {
+          lobbyIdentifier: store.lobbyIdentifier,
           matchName: inputValue.value
         }
       })
@@ -20,7 +21,7 @@ const createMatch = () => {
           matchID: response.matchID,
         })
         console.log(store.matchID)
-        router.push({ path: '/join-game' })
+        router.push({path: '/join-game'})
       })
 }
 </script>
@@ -33,7 +34,7 @@ const createMatch = () => {
         <span class="label-text">Lobby name</span>
       </div>
       <input type="text" v-model="inputValue" placeholder="Type here"
-             class="input input-bordered input-primary w-full max-w-xs" />
+             class="input input-bordered input-primary w-full max-w-xs"/>
       <div class="flex justify-end">
         <button class="btn btn-primary btn-sm w-1/3" @click="createMatch">Create</button>
       </div>

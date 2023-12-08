@@ -2,7 +2,6 @@
 import { type LobbyAPI } from 'boardgame.io'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useStore } from '../store'
-import router from '../router'
 import LobbyList from '@/components/LobbyList.vue'
 import CreateLobby from "@/components/CreateLobby.vue";
 
@@ -29,7 +28,7 @@ const updateMatches = () => {
 
 <template>
   <div class="flex flex-col gap-y-10 text-center">
-    <CreateLobby/>
+    <CreateLobby :unlisted="false"/>
     <h2 class="font-bold">
       or
     </h2>
