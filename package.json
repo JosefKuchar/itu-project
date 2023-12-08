@@ -13,13 +13,13 @@
     "server": "ts-node -r esm src/server.ts"
   },
   "dependencies": {
+    "@vueuse/core": "^10.7.0",
     "boardgame.io": "^0.50.2",
     "esm": "^3.2.25",
     "pinia": "^2.1.7",
     "react": "^18.2.0",
     "vue": "^3.3.4",
-    "vue-router": "^4.2.4",
-    "vue3-clipboard": "^1.0.0"
+    "vue-router": "^4.2.4"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.3.3",
