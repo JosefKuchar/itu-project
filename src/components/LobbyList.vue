@@ -40,6 +40,17 @@ const joinMatch = (matchID: string) => {
   })
   //TODO: check errors
 }
+
+const computeCapacity = (match: LobbyAPI.Match) => {
+  if (match.players[0].name != undefined && match.players[1].name != undefined) {
+    return 2;
+  } else if (match.players[0].name != undefined || match.players[1].name != undefined) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
 </script>
 
 <template>
@@ -50,7 +61,10 @@ const joinMatch = (matchID: string) => {
         <li v-for="match in matches" :key="match.matchID">
           <div class="flex justify-between my-3">
             <div class="text-lg">{{ match.setupData.matchName }}</div>
-            <button class="btn btn-ternary btn-sm" @click="joinMatch(match.matchID)">Join</button>
+            <div class="flex justify-end gap-x-5 items-center">
+              <div class="text-sm">{{ computeCapacity(match) == 0 ? '0/2' : computeCapacity(match) == 1 ? '1/2' : '2/2' }}</div>
+              <button class="btn btn-ternary btn-sm" @click="joinMatch(match.matchID)" >Join</button>
+            </div>
           </div>
         </li>
       </ul>

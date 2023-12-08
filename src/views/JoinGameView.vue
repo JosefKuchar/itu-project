@@ -7,7 +7,7 @@ import router from "@/router";
 const store = useStore();
 const playerName = ref('');
 const err = ref('');
-const ready = ref(false);
+const notReady = ref(true);
 const interval = ref();
 
 onMounted(() => {
@@ -33,14 +33,14 @@ const checkIfBothReady = () => {
 }
 
 const changeJoinState = () => {
-  if (ready.value) {
+  if (!notReady.value) {
     store.lobbyClient.joinMatch('checkers', store.matchID, {
       playerName: playerName.value || 'Anonymous'
     }).then((c: any) => {
+      console.log(store.matchID);
       store.$patch({
         playerCredentials: c.playerCredentials,
         playerID: c.playerID,
-        matchID: store.matchID
       })
     })
   } else {
@@ -52,7 +52,6 @@ const changeJoinState = () => {
           store.$patch({
             playerCredentials: '',
             playerID: '',
-            matchID: '',
           })
         })
   }
@@ -72,6 +71,6 @@ const changeJoinState = () => {
         {{ err }}
       </div>
     </div>
-    <input type="checkbox" aria-label="Ready" class="btn" @change="changeJoinState" v-model="ready" v-bind:disabled="err != ''"/>
+    <input type="checkbox" aria-label="Ready" class="btn btn-success" @change="changeJoinState" v-model="notReady" v-bind:disabled="err != ''"/>
   </div>
 </template>
