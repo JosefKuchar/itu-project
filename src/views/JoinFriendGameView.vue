@@ -10,13 +10,27 @@ const gameIdParam = route.params.id;
 
 const err = ref('');
 
+//TODO: check if game is full
 store.lobbyClient.listMatches('checkers').then((m) => {
   const game = m.matches.find((match) => match.setupData.lobbyIdentifier === gameIdParam);
   if (game) {
     store.$patch((state) => {
       state.matchID = game.matchID;
     });
-    router.push('/join-game');
+
+    store.lobbyClient.joinMatch('checkers', game.matchID, {
+      playerName: 'Anonymous',
+      data: {
+        ready: false
+      }
+    }).then((c: any) => {
+      store.$patch({
+        playerCredentials: c.playerCredentials,
+        playerID: c.playerID,
+      })
+      router.push('/join-game');
+    })
+
   } else {
     err.value = 'Game not found';
   }

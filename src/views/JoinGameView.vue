@@ -7,7 +7,7 @@ import router from "@/router";
 const store = useStore();
 const playerName = ref('');
 const err = ref('');
-const notReady = ref(true);
+const ready = ref(false);
 const interval = ref();
 
 onMounted(() => {
@@ -17,44 +17,37 @@ onMounted(() => {
 
 onUnmounted(() => {
   clearInterval(interval.value);
+  if (ready.value) return;
+  store.lobbyClient.leaveMatch('checkers', store.matchID, {
+    playerID: store.playerID,
+    credentials: store.playerCredentials
+  }).then((m: any) => {
+    store.$patch({
+      matchID: '',
+      playerCredentials: '',
+      playerID: '',
+    })
+  })
 })
 
 const checkIfBothReady = () => {
-  // TODO: How to catch this error?
   store.lobbyClient.getMatch('checkers', store.matchID).then((m: any) => {
-    if (m.players[0].name != undefined && m.players[1].name != undefined) {
-      if (store.playerCredentials == '') {
-        err.value = 'Match has already started'
-      } else {
-        router.push({path: '/game'})
-      }
+    if (m.players[0].data.ready && m.players[1].data.ready) {
+      router.push({path: '/game'})
     }
   })
 }
 
+// TODO: Need to not leave the match on click, rather set other flag, because the match gets deleted
 const changeJoinState = () => {
-  if (!notReady.value) {
-    store.lobbyClient.joinMatch('checkers', store.matchID, {
-      playerName: playerName.value || 'Anonymous'
-    }).then((c: any) => {
-      console.log(store.matchID);
-      store.$patch({
-        playerCredentials: c.playerCredentials,
-        playerID: c.playerID,
-      })
-    })
-  } else {
-    store.lobbyClient.leaveMatch('checkers', store.matchID, {
-      playerID: store.playerID,
-      credentials: store.playerCredentials
-    })
-        .then(() => {
-          store.$patch({
-            playerCredentials: '',
-            playerID: '',
-          })
-        })
-  }
+  ready.value = !ready.value;
+  store.lobbyClient.updatePlayer('checkers', store.matchID, {
+    playerID: store.playerID,
+    credentials: store.playerCredentials,
+    data: {
+      ready: ready.value
+    }
+  })
 }
 
 </script>
@@ -71,6 +64,7 @@ const changeJoinState = () => {
         {{ err }}
       </div>
     </div>
-    <input type="checkbox" aria-label="Ready" class="btn btn-success" @change="changeJoinState" v-model="notReady" v-bind:disabled="err != ''"/>
+    <input type="checkbox" aria-label="Ready" class="btn btn-success" @change="changeJoinState" v-bind:checked="!ready"
+           v-bind:disabled="err != ''"/>
   </div>
 </template>

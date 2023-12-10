@@ -2,7 +2,6 @@
 import { useStore } from '@/store';
 import { type LobbyAPI } from 'boardgame.io';
 import { ref, onMounted, onUnmounted } from 'vue';
-import router from '@/router';
 
 const store = useStore();
 const interval = ref();
@@ -31,15 +30,6 @@ const updateMatches = () => {
   })
 }
 
-const joinMatch = (matchID: string) => {
-  store.lobbyClient.getMatch('checkers', matchID).then((m: any) => {
-    store.$patch({
-      matchID: matchID
-    });
-    router.push({ path: '/join-game' });
-  })
-  //TODO: check errors
-}
 
 const computeCapacity = (match: LobbyAPI.Match) => {
   if (match.players[0].name != undefined && match.players[1].name != undefined) {
@@ -63,7 +53,7 @@ const computeCapacity = (match: LobbyAPI.Match) => {
             <div class="text-lg">{{ match.setupData.matchName }}</div>
             <div class="flex justify-end gap-x-5 items-center">
               <div class="text-sm">{{ computeCapacity(match) == 0 ? '0/2' : computeCapacity(match) == 1 ? '1/2' : '2/2' }}</div>
-              <button class="btn btn-ternary btn-sm" @click="joinMatch(match.matchID)" >Join</button>
+              <button class="btn btn-ternary btn-sm" @click="store.joinMatch(match.matchID)" v-bind:disabled="computeCapacity(match) == 2">Join</button>
             </div>
           </div>
         </li>

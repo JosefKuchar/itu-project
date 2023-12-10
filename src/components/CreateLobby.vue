@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import {ref, watch} from "vue";
-import router from "@/router";
+import {ref} from "vue";
 import {useStore} from "@/store";
 
 const store = useStore();
@@ -17,11 +16,7 @@ const createMatch = () => {
         }
       })
       .then((response: any) => {
-        store.$patch({
-          matchID: response.matchID,
-        })
-        console.log(store.matchID)
-        router.push({path: '/join-game'})
+        store.joinMatch(response.matchID);
       })
 }
 </script>
