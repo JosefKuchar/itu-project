@@ -17,17 +17,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   clearInterval(interval.value);
-  if (ready.value) return;
-  store.lobbyClient.leaveMatch('checkers', store.matchID, {
-    playerID: store.playerID,
-    credentials: store.playerCredentials
-  }).then((m: any) => {
-    store.$patch({
-      matchID: '',
-      playerCredentials: '',
-      playerID: '',
-    })
-  })
+
 })
 
 const checkIfBothReady = () => {

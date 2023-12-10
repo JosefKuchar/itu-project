@@ -8,6 +8,8 @@ import PlayWithAi from '@/views/PlayWithAi.vue'
 import JoinGameView from '@/views/JoinGameView.vue'
 import JoinFriendGameView from "@/views/JoinFriendGameView.vue";
 
+import { useStore } from '@/store'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -52,6 +54,14 @@ const router = createRouter({
       component: JoinFriendGameView,
     }
   ]
+})
+
+// TODO: I hate this
+router.beforeEach((to, from, next) => {
+  if (from.name === 'join-game' && to.name !== 'game') {
+    useStore().leaveMatch()
+  }
+  next()
 })
 
 export default router

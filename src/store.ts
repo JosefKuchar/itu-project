@@ -36,7 +36,19 @@ export const useStore = defineStore('store', {
         })
       })
       router.push({path: '/join-game'})
+    },
 
+    leaveMatch() {
+      this.lobbyClient.leaveMatch('checkers', this.matchID, {
+        playerID: this.playerID,
+        credentials: this.playerCredentials
+      }).then(() => {
+        this.$patch({
+          playerCredentials: '',
+          playerID: '',
+          matchID: ''
+        })
+      })
     }
   }
 })
