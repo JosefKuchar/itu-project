@@ -19,7 +19,8 @@ const playWithAi = () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-y-10">
+  <div class="flex flex-col gap-y-10 items-center">
+    <img src="../assets/logo.png" alt="logo" class="w-1/2 mx-auto"/>
     <button class="btn btn-primary btn-wide" @click="createMatch">Create match</button>
     <button class="btn btn-primary btn-wide" @click="playWithFriend">Play with a friend</button>
     <button class="btn btn-primary btn-wide" @click="playPublic">Play public</button>

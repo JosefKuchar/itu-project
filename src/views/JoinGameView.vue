@@ -28,7 +28,6 @@ const checkIfBothReady = () => {
   })
 }
 
-// TODO: Need to not leave the match on click, rather set other flag, because the match gets deleted
 const changeJoinState = () => {
   ready.value = !ready.value;
   store.lobbyClient.updatePlayer('checkers', store.matchID, {
