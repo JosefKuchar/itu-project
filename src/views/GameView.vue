@@ -6,7 +6,6 @@ import { Client } from 'boardgame.io/client'
 import Board from '../components/Board.vue'
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { useRoute } from 'vue-router'
-import { computed } from 'vue'
 import { useStore } from '../store'
 
 const store = useStore()

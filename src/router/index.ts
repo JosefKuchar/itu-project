@@ -1,6 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import GameView from '../views/GameView.vue'
-import LobbyView from '../views/LobbyView.vue'
+import MenuView from '@/views/MenuView.vue'
+import CreateLobbyView from '@/views/CreateLobbyView.vue'
+import PlayWithFriendView from '@/views/PlayWithFriendView.vue'
+import PlayPublicView from '@/views/PlayPublicView.vue'
+import PlayWithAi from '@/views/PlayWithAi.vue'
+import JoinGameView from '@/views/JoinGameView.vue'
+import JoinFriendGameView from "@/views/JoinFriendGameView.vue";
+
+import { useStore } from '@/store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,11 +19,49 @@ const router = createRouter({
       component: GameView
     },
     {
+      path: '/create-lobby',
+      name: 'create-lobby',
+      component: CreateLobbyView,
+    },
+    {
+      path: '/play-with-friend',
+      name: 'play-with-friend',
+      component: PlayWithFriendView,
+    },
+    {
+      path: '/play-public',
+      name: 'play-public',
+      component: PlayPublicView,
+    },
+    {
+      path: '/play-with-ai',
+      name: 'play-with-ai',
+      component: PlayWithAi
+    },
+    {
       path: '/',
-      name: 'lobby',
-      component: LobbyView
+      name: 'menu',
+      component: MenuView,
+    },
+    {
+      path: '/join-game',
+      name: 'join-game',
+      component: JoinGameView,
+    },
+    {
+      path: '/join-friend-game/:id',
+      name: 'join-friend-game',
+      component: JoinFriendGameView,
     }
   ]
+})
+
+// TODO: I hate this
+router.beforeEach((to, from, next) => {
+  if (from.name === 'join-game' && to.name !== 'game') {
+    useStore().leaveMatch()
+  }
+  next()
 })
 
 export default router
