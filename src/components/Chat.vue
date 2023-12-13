@@ -16,6 +16,15 @@ const getPlayerName = (id: string) => {
   )?.name;
 }
 
+const getTime = (time: number) => {
+  const date = new Date(time);
+  // Add leading zero to minutes
+  if (date.getMinutes() < 10) {
+    return `${date.getHours()}:0${date.getMinutes()}`;
+  }
+  return `${date.getHours()}:${date.getMinutes()}`;
+}
+
 watch(state, () => {
   messages.value = client.value.chatMessages;
 })
@@ -36,14 +45,14 @@ const onSubmit = () => {
   <div class="rounded-xl bg-gray-100 min-h-full flex flex-col p-4 gap-2 w-[300px]">
     <div class="text-lg font-bold">Chat</div>
     <div class="grow">
-      <div v-for="message in messages" class="text-sm">
+      <div v-for="message in messages" class="text-sm flex justify-between">
         <div class="flex gap-2 max-w-full">
           <div class="font-semibold">{{ getPlayerName(message.sender) + ':' }}</div>
           <div class="break-all text-gray-700">
             {{ message.payload.message }}
           </div>
         </div>
-        <div>{{ }}</div>
+        <div>{{ getTime(message.payload.time) }}</div>
       </div>
     </div>
     <div class="flex gap-2">
