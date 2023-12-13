@@ -110,7 +110,8 @@ onUnmounted(() => {
               :class="state.ctx.currentPlayer == player.id ? 'bg-gray-900 border-gray-900' : 'bg-transparent border-gray-400'">
             </div>
             <div class="font-semibold text-sm transition-all ease-in-out"
-              :class="state.ctx.currentPlayer == player.id ? 'text-gray-900' : 'text-gray-600'">{{ player.name }}</div>
+              :class="state.ctx.currentPlayer == player.id ? 'text-gray-900' : 'text-gray-600'">{{ player.name }}
+            </div>
           </div>
         </div>
       </div>
