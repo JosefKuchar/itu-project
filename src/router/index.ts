@@ -7,6 +7,7 @@ import PlayPublicView from '@/views/PlayPublicView.vue'
 import PlayWithAi from '@/views/PlayWithAi.vue'
 import JoinGameView from '@/views/JoinGameView.vue'
 import JoinFriendGameView from "@/views/JoinFriendGameView.vue";
+import ResultView from "@/views/ResultView.vue";
 
 import { useStore } from '@/store'
 
@@ -52,6 +53,11 @@ const router = createRouter({
       path: '/join-friend-game/:id',
       name: 'join-friend-game',
       component: JoinFriendGameView,
+    },
+    {
+      path: '/result/:winner/:gameElapsed/:clientElapsed',
+      name: 'result',
+      component: ResultView,
     }
   ]
 })

@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { Checkers } from '../game'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { onMounted, onUnmounted } from 'vue'
 import { Client } from 'boardgame.io/client'
 import Board from '../components/Board.vue'
 import { SocketIO } from 'boardgame.io/multiplayer'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from '../store'
 import Chat from '../components/Chat.vue'
-import { start } from 'repl'
 
 const store = useStore()
 const route = useRoute()
+const router = useRouter()
 
 const startOfGame = ref();
 const gameElapsed = ref();
@@ -41,6 +41,22 @@ const updateTime = () => {
 const client = ref()
 const unsubscribe = ref()
 const state = ref()
+
+watch(state, () => {
+  if (state.value.ctx.gameover) {
+    clearInterval(gameInterval.value)
+
+    // Push to results page
+    router.push({
+      name: 'results',
+      params: {
+        winner: state.value.ctx.gameover.winner == client.value.playerID ? '0' : '1',
+        gameElapsed: gameElapsed.value,
+        clientElapsed: clientElapsed.value
+      }
+    })
+  }
+})
 
 onMounted(() => {
   client.value = Client({
