@@ -196,6 +196,7 @@ export const Checkers: Game<GameState> = {
       blackPlayer: '1'
     }
   },
+  // Possible moves
   moves: {
     // Move a piece
     movePiece: ({ G, playerID, events }, from, to) => {
@@ -252,6 +253,7 @@ export const Checkers: Game<GameState> = {
       events.endTurn()
     }
   },
+  // Hooks
   turn: {
     // Win condition
     onBegin: ({ G, ctx, events }) => {
@@ -261,6 +263,16 @@ export const Checkers: Game<GameState> = {
       if (moves.length === 0) {
         events.endGame({ winner: currentPlayer === G.whitePlayer ? G.blackPlayer : G.whitePlayer })
       }
+    }
+  },
+  // Bot AI
+  ai: {
+    enumerate: (G, ctx) => {
+      const moves = getValidMoves(G, ctx.currentPlayer)
+      return moves.map((move) => ({
+        move: 'movePiece',
+        args: [move.from, move.to]
+      }))
     }
   }
 }
