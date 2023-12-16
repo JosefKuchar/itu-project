@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import router from '@/router';
+import router from '@/router'
 
 const createMatch = () => {
   router.push('/create-lobby')
@@ -32,7 +32,7 @@ localStorage.removeItem('startOfGame');
       <button class="btn btn-primary btn-wide" @click="createMatch">Create match</button>
       <button class="btn btn-secondary btn-wide" @click="playWithFriend">Play with a friend</button>
       <button class="btn btn-secondary btn-wide" @click="playPublic">Play public</button>
-      <!-- <button class="btn btn-secondary btn-wide" @click="playWithAi">Play with a bot</button> -->
+      <button class="btn btn-secondary btn-wide" @click="playWithAi">Play with a bot</button>
     </div>
   </div>
 </template>
