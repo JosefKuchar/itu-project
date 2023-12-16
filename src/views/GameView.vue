@@ -24,8 +24,20 @@ onMounted(() => {
   gameStore.client.start()
   gameStore.unsubscribe = gameStore.client.subscribe((newState: any) => {
     if (newState == null) return
+    const oldState = gameStore.state
     gameStore.state = newState
     gameStore.messages = gameStore.client.chatMessages
+
+    // If its another turn, push to history 
+    if (newState.ctx?.turn !== oldState.ctx?.turn) {
+      console.log('pice')
+      gameStore.gameHistory.push(newState)
+    }
+
+    // Persist the game history, for now
+    localStorage.setItem('gameHistory', JSON.stringify(gameStore.gameHistory))
+
+    console.log(gameStore.gameHistory)
 
     if (newState.ctx.gameover) {
       gameStore.winner = newState.ctx.gameover.winner

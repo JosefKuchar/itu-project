@@ -10,7 +10,7 @@ localStorage.removeItem('matchID');
 localStorage.removeItem('playerID');
 localStorage.removeItem('playerCredentials');
 localStorage.removeItem('clientElapsedSeconds');
-localStorage.removeItem('startOfGame');
+localStorage.removeItem('gameElapsedSeconds');
 </script>
 
 <template>
@@ -18,7 +18,7 @@ localStorage.removeItem('startOfGame');
     <img :src="logo" alt="logo" class="w-1/2 mx-auto" />
     <div class="bg-gray-100 min-w-[330px] rounded-xl flex flex-col gap-4 p-4">
       <div class="text-2xl font-semibold text-center">
-        {{ gameStore.winner == gameStore.client.playerID ? 'You won!' : 'You lost!' }}
+        {{ gameStore.winner == gameStore.client?.playerID ? 'You won!' : 'You lost!' }}
       </div>
       <div>
         <div class="text-gray-700 flex justify-between">

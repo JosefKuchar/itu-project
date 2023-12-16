@@ -22,7 +22,7 @@ localStorage.removeItem('matchID');
 localStorage.removeItem('playerID');
 localStorage.removeItem('playerCredentials');
 localStorage.removeItem('clientElapsedSeconds');
-localStorage.removeItem('startOfGame');
+localStorage.removeItem('gameElapsedSeconds');
 </script>
 
 <template>

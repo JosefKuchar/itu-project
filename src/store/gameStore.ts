@@ -14,6 +14,8 @@ export const useGameStore = defineStore('game', () => {
   const messages = ref([])
   const winner = ref()
 
+  const gameHistory = ref([])
+
   const testCount = ref(0)
 
   const clientElapsed = computed(() => {
@@ -92,5 +94,6 @@ export const useGameStore = defineStore('game', () => {
     sendMessage,
     messages,
     winner,
+    gameHistory
   }
 })

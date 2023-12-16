@@ -4,9 +4,18 @@ import { type Piece, type GameState, Player, getValidMoves, calculateIndex } fro
 import type { Ctx } from 'boardgame.io'
 import { useStore } from '../store'
 import { useGameStore } from '../store/gameStore'
+import { BackwardIcon, ForwardIcon, PlayPauseIcon } from '@heroicons/vue/24/solid'
 
 const store = useStore()
 const gameStore = useGameStore()
+
+interface Props {
+  replay: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  replay: false,
+})
 
 const selectedPiece = ref<number | null>(null)
 const board = ref<HTMLDivElement>()
@@ -27,20 +36,33 @@ const getTransform = (index?: number) => {
   return `translate(${x * 100}%, ${y * 100}%)`
 }
 
+const historyTurn = computed(() => gameStore.gameHistory[currentStep.value]?.ctx.turn)
+const currentStep = ref(0)
+
+const gameState = computed(() => {
+  if (props.replay) {
+    return gameStore.gameHistory[currentStep.value].G
+  } else {
+    return gameStore.state.G
+  }
+})
+
 const pieces = computed(
   () =>
-    (gameStore.state.G as GameState)?.cells
+    (gameState.value as GameState)?.cells
       .map((piece, index) => ({ piece, index }))
       .filter((cell) => cell.piece !== null)
       .sort((a, b) => a.piece!.id! - b.piece!.id!) as { piece: Piece; index: number }[]
 )
 
 const validMoves = computed(() => {
+  if (props.replay) return []
   if (gameStore.state.ctx.currentPlayer !== store.playerID) return []
   return getValidMoves(gameStore.state.G, store.playerID)
 })
 
 const handleClick = (value: number) => {
+  if (props.replay) return
   if (gameStore.state.ctx.currentPlayer !== store.playerID) return
 
   if (selectedPiece.value === null) {
@@ -61,12 +83,14 @@ const isHovering = (index: number) => {
 }
 
 const handleMouseDown = (e: MouseEvent, index: number) => {
+  if (props.replay) return
   selectedPiece.value = index
   startCoords.value = { x: e.pageX, y: e.pageY }
   dragging.value = true
 }
 
 const handleMouseUp = (e: MouseEvent) => {
+  if (props.replay) return
   if (startCoords.value) {
     const diffX = e.pageX - startCoords.value.x
     const diffY = e.pageY - startCoords.value.y
@@ -105,6 +129,38 @@ const handleMouseMove = (e: any) => {
     const cornerX = (rawX / board.value.offsetWidth) * 8
     const cornerY = (rawY / board.value.offsetWidth) * 8
     dragCoords.value = { x, y, cornerX, cornerY }
+  }
+}
+
+const nextStep = () => {
+  if (currentStep.value < gameStore.gameHistory.length - 1) {
+    currentStep.value++
+  }
+}
+
+const prevStep = () => {
+  if (currentStep.value > 0) {
+    currentStep.value--
+  }
+}
+
+const autoplay = ref(false)
+const autoplayInterval = ref<any>(null)
+
+const toggleAuto = () => {
+  autoplay.value = !autoplay.value
+  if (autoplay.value) {
+    autoplayInterval.value = setInterval(() => {
+      if (currentStep.value < gameStore.gameHistory.length - 1) {
+        currentStep.value++
+      } else {
+        clearInterval(autoplayInterval.value)
+        autoplay.value = false
+      }
+    }, 1000)
+  } else {
+    console.log('clearing interval')
+    clearInterval(autoplayInterval.value)
   }
 }
 </script>
@@ -200,9 +256,9 @@ const handleMouseMove = (e: any) => {
 </style>
 
 <template>
-  <div class="board">
+  <div class="board rounded-xl overflow-hidden">
     <div class="grid" @mousemove="handleMouseMove" ref="board">
-      <div v-for="(_, index) in gameStore.state.G?.cells " :class="{
+      <div v-for="(_, index) in gameState.cells " :class="{
         cell: true, 'cell-hover': isHovering(index),
         'bg-gray-200': (index % 2 === Math.floor(index / 8) % 2)
       }" :key="index" class="bg-gray-100" @click="handleClick(index)">
@@ -229,6 +285,30 @@ const handleMouseMove = (e: any) => {
           <div class="piece piece-cue"></div>
         </div>
       </template>
+    </div>
+  </div>
+  <div class="flex justify-between gap-2 mt-4" v-if="replay">
+    <div class="flex gap-2">
+      <RouterLink to="/">
+        <button class="btn btn-secondary">
+          Exit
+        </button>
+      </RouterLink>
+      <div class="flex items-center gap-1 px-4 border border-gray-400 rounded-xl">
+        <div class="font-semibold">Turn:</div>
+        <div>{{ historyTurn + '/' + (gameStore.gameHistory.length + 1) }}</div>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button class="btn btn-secondary" @click="prevStep">
+        <BackwardIcon class="h-4 w-4"></BackwardIcon>
+      </button>
+      <button class="btn" :class="autoplay ? 'btn-primary' : 'btn-secondary'" @click="toggleAuto">
+        <PlayPauseIcon class="h-4 w-4"></PlayPauseIcon>
+      </button>
+      <button class="btn btn-secondary" @click="nextStep">
+        <ForwardIcon class="h-4 w-4"></ForwardIcon>
+      </button>
     </div>
   </div>
 </template>

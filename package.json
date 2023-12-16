@@ -13,6 +13,7 @@
     "server": "ts-node -r esm src/server.ts"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.0.18",
     "@vueuse/core": "^10.7.0",
     "boardgame.io": "^0.50.2",
     "esm": "^3.2.25",

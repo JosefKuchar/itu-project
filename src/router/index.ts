@@ -8,6 +8,7 @@ import PlayWithAi from '@/views/PlayWithAi.vue'
 import JoinGameView from '@/views/JoinGameView.vue'
 import JoinFriendGameView from "@/views/JoinFriendGameView.vue";
 import ResultView from "@/views/ResultView.vue";
+import ReplayView from "@/views/ReplayView.vue";
 
 import { useStore } from '@/store'
 
@@ -58,6 +59,11 @@ const router = createRouter({
       path: '/result',
       name: 'result',
       component: ResultView,
+    },
+    {
+      path: '/replay',
+      name: 'replay',
+      component: ReplayView,
     }
   ]
 })
