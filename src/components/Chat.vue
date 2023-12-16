@@ -1,41 +1,14 @@
 <script lang="ts" setup>
-import { watch, computed, ref, toRef } from 'vue';
+import { watch, ref } from 'vue';
+import { useGameStore } from '../store/gameStore';
+import { gameEvent } from 'boardgame.io/dist/types/src/core/action-creators';
 
-const props = defineProps(['client', 'messages', 'state']);
-
-const client = toRef(props, 'client');
-const state = toRef(props, 'state');
-
+const gameStore = useGameStore();
 const message = ref('');
-const messages = ref(client.value.chatMessages)
-const players = ref(client.value.matchData)
-
-const getPlayerName = (id: string) => {
-  return players.value.find((player: { id: string }) =>
-    player.id == id
-  )?.name;
-}
-
-const getTime = (time: number) => {
-  const date = new Date(time);
-  // Add leading zero to minutes
-  if (date.getMinutes() < 10) {
-    return `${date.getHours()}:0${date.getMinutes()}`;
-  }
-  return `${date.getHours()}:${date.getMinutes()}`;
-}
-
-watch(state, () => {
-  messages.value = client.value.chatMessages;
-})
 
 const onSubmit = () => {
   if (message.value) {
-    client.value.sendChatMessage({
-      message: message.value,
-      time: Date.now(),
-    });
-
+    gameStore.sendMessage(message.value);
     message.value = '';
   }
 }
@@ -45,14 +18,14 @@ const onSubmit = () => {
   <div class="rounded-xl bg-gray-100 flex flex-col p-4 gap-2 w-[300px]">
     <div class="text-lg font-bold">Chat</div>
     <div class="grow">
-      <div v-for="message in messages" class="text-sm flex justify-between">
+      <div v-for="message in gameStore.messages" class="text-sm flex justify-between">
         <div class="flex gap-2 max-w-full">
-          <div class="font-semibold">{{ getPlayerName(message.sender) + ':' }}</div>
+          <div class="font-semibold">{{ gameStore.getPlayerName(message.sender) + ':' }}</div>
           <div class="break-all text-gray-700">
             {{ message.payload.message }}
           </div>
         </div>
-        <div>{{ getTime(message.payload.time) }}</div>
+        <div>{{ gameStore.getTime(message.payload.time) }}</div>
       </div>
     </div>
     <div class="flex gap-2">

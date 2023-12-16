@@ -16,6 +16,13 @@ const playPublic = () => {
 const playWithAi = () => {
   router.push('/play-with-ai')
 }
+
+// Clear local storage
+localStorage.removeItem('matchID');
+localStorage.removeItem('playerID');
+localStorage.removeItem('playerCredentials');
+localStorage.removeItem('clientElapsedSeconds');
+localStorage.removeItem('startOfGame');
 </script>
 
 <template>

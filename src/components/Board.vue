@@ -3,17 +3,12 @@ import { computed, ref } from 'vue'
 import { type Piece, type GameState, Player, getValidMoves, calculateIndex } from '../game'
 import type { Ctx } from 'boardgame.io'
 import { useStore } from '../store'
-
-type Props = {
-  G: GameState
-  ctx: Ctx
-  moves: any
-}
+import { useGameStore } from '../store/gameStore'
 
 const store = useStore()
+const gameStore = useGameStore()
 
 const selectedPiece = ref<number | null>(null)
-const props = defineProps<Props>()
 const board = ref<HTMLDivElement>()
 const dragCoords = ref<{ x: number; y: number; cornerX: number; cornerY: number } | null>(null)
 const dragging = ref(false)
@@ -34,25 +29,25 @@ const getTransform = (index?: number) => {
 
 const pieces = computed(
   () =>
-    props.G?.cells
+    (gameStore.state.G as GameState)?.cells
       .map((piece, index) => ({ piece, index }))
       .filter((cell) => cell.piece !== null)
       .sort((a, b) => a.piece!.id! - b.piece!.id!) as { piece: Piece; index: number }[]
 )
 
 const validMoves = computed(() => {
-  if (props.ctx.currentPlayer !== store.playerID) return []
-  return getValidMoves(props.G, store.playerID)
+  if (gameStore.state.ctx.currentPlayer !== store.playerID) return []
+  return getValidMoves(gameStore.state.G, store.playerID)
 })
 
 const handleClick = (value: number) => {
-  if (props.ctx.currentPlayer !== store.playerID) return
+  if (gameStore.state.ctx.currentPlayer !== store.playerID) return
 
   if (selectedPiece.value === null) {
     if (!validMoves.value.some((move) => move.from === value)) return
     selectedPiece.value = value
   } else {
-    props.moves?.movePiece(selectedPiece.value, value)
+    gameStore.client.moves?.movePiece(selectedPiece.value, value)
     selectedPiece.value = null
   }
 }
@@ -93,7 +88,7 @@ const handleMouseUp = (e: MouseEvent) => {
         (move) => move.from === selectedPiece.value && move.to === calculatedIndex
       )
     ) {
-      props.moves?.movePiece(selectedPiece.value, calculatedIndex)
+      gameStore.client.moves?.movePiece(selectedPiece.value, calculatedIndex)
     }
   }
 
@@ -207,7 +202,7 @@ const handleMouseMove = (e: any) => {
 <template>
   <div class="board">
     <div class="grid" @mousemove="handleMouseMove" ref="board">
-      <div v-for="(_, index) in  G?.cells " :class="{
+      <div v-for="(_, index) in gameStore.state.G?.cells " :class="{
         cell: true, 'cell-hover': isHovering(index),
         'bg-gray-200': (index % 2 === Math.floor(index / 8) % 2)
       }" :key="index" class="bg-gray-100" @click="handleClick(index)">

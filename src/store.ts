@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import { LobbyClient } from 'boardgame.io/client'
 import router from "@/router";
 
@@ -35,7 +35,7 @@ export const useStore = defineStore('store', {
           matchID: matchID
         })
       })
-      router.push({path: '/join-game'})
+      router.push({ path: '/join-game' })
     },
 
     leaveMatch() {
@@ -49,6 +49,9 @@ export const useStore = defineStore('store', {
           matchID: ''
         })
       })
-    }
+    },
+  },
+  persist: {
+    storage: window.sessionStorage,
   }
-})
+});

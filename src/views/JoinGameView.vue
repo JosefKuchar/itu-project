@@ -24,10 +24,14 @@ const checkIfBothReady = () => {
   store.lobbyClient.getMatch('checkers', store.matchID).then((m: any) => {
     if (m.players[0].data.ready && m.players[1].data.ready) {
       store.lobbyClient.updatePlayer('checkers', store.matchID, {
-        newName: playerName.value,
+        newName: playerName.value || "Anonymous",
         playerID: store.playerID,
         credentials: store.playerCredentials,
       }).then(() => {
+        // Save playerIDm matchID and playerCredentials to localStorage
+        localStorage.setItem('playerID', store.playerID)
+        localStorage.setItem('matchID', store.matchID)
+        localStorage.setItem('playerCredentials', store.playerCredentials)
         router.push('/game');
       })
     }
@@ -37,7 +41,7 @@ const checkIfBothReady = () => {
 const changeJoinState = () => {
   ready.value = !ready.value;
   store.lobbyClient.updatePlayer('checkers', store.matchID, {
-    newName: playerName.value,
+    newName: playerName.value || "Anonymous",
     playerID: store.playerID,
     credentials: store.playerCredentials,
     data: {

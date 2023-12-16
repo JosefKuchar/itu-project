@@ -55,7 +55,7 @@ const router = createRouter({
       component: JoinFriendGameView,
     },
     {
-      path: '/result/:winner/:gameElapsed/:clientElapsed',
+      path: '/result',
       name: 'result',
       component: ResultView,
     }
