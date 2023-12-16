@@ -42,7 +42,7 @@ const onSubmit = () => {
 </script>
 
 <template>
-  <div class="rounded-xl bg-gray-100 min-h-full flex flex-col p-4 gap-2 w-[300px]">
+  <div class="rounded-xl bg-gray-100 flex flex-col p-4 gap-2 w-[300px]">
     <div class="text-lg font-bold">Chat</div>
     <div class="grow">
       <div v-for="message in messages" class="text-sm flex justify-between">

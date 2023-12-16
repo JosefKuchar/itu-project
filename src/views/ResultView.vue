@@ -24,8 +24,8 @@ const route = useRoute();
       </div>
     </div>
     <div class="flex justify-between">
+      <RouterLink to="/replay" class="btn btn-secondary">Replay</RouterLink>
       <RouterLink to="/" class="btn btn-primary">Back to menu</RouterLink>
-      <RouterLink to="/replay" class="btn btn-primary">Replay</RouterLink>
     </div>
   </div>
 </template>

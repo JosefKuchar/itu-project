@@ -105,8 +105,8 @@ const handleMouseMove = (e: any) => {
   if (board.value && selectedPiece.value !== null && dragging.value) {
     const rawX = e.clientX - board.value.offsetLeft
     const rawY = e.clientY - board.value.offsetTop
-    const x = ((rawX - 24) / board.value.offsetWidth) * 8
-    const y = ((rawY - 24) / board.value.offsetHeight) * 8
+    const x = ((rawX - 48) / board.value.offsetWidth) * 8
+    const y = ((rawY - 48) / board.value.offsetHeight) * 8
     const cornerX = (rawX / board.value.offsetWidth) * 8
     const cornerY = (rawY / board.value.offsetWidth) * 8
     dragCoords.value = { x, y, cornerX, cornerY }
@@ -118,8 +118,8 @@ const handleMouseMove = (e: any) => {
 <style scoped>
 .grid {
   display: grid;
-  grid-template-columns: repeat(8, 3rem);
-  grid-template-rows: repeat(8, 3rem);
+  grid-template-columns: repeat(8, 6rem);
+  grid-template-rows: repeat(8, 6rem);
   user-select: none;
 }
 
@@ -132,8 +132,8 @@ const handleMouseMove = (e: any) => {
 }
 
 .piece-wrapper {
-  width: 3rem;
-  height: 3rem;
+  width: 6rem;
+  height: 6rem;
   position: absolute;
   box-sizing: border-box;
 }
@@ -143,9 +143,9 @@ const handleMouseMove = (e: any) => {
 }
 
 .piece {
-  width: 2rem;
-  height: 2rem;
-  margin: 0.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 1.25rem;
   box-sizing: border-box;
   border-radius: 999px;
   display: flex;
@@ -158,13 +158,13 @@ const handleMouseMove = (e: any) => {
 }
 
 .piece-selected {
-  width: 2.5rem;
-  height: 2.5rem;
-  margin: 0.25rem;
+  width: 4rem;
+  height: 4rem;
+  margin: 1rem;
 }
 
 .piece-white {
-  background: #aaa;
+  background: #DB5461;
 }
 
 .piece-movable {
@@ -172,7 +172,7 @@ const handleMouseMove = (e: any) => {
 }
 
 .piece-white.piece-movable {
-  border: 3px solid #ffff00;
+  @apply border-4 border-primary;
 }
 
 .piece-black {
@@ -180,14 +180,14 @@ const handleMouseMove = (e: any) => {
 }
 
 .piece-black.piece-movable {
-  border: 3px solid #ffff00;
+  @apply border-4 border-primary;
 }
 
 .piece-cue {
   background: #5a94f2;
-  width: 1rem;
-  height: 1rem;
-  margin: 1rem;
+  width: 2rem;
+  height: 2rem;
+  margin: 2rem;
   opacity: 0;
 
   animation: cue 0.2s ease-in-out normal forwards;
@@ -197,6 +197,7 @@ const handleMouseMove = (e: any) => {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -206,43 +207,30 @@ const handleMouseMove = (e: any) => {
 <template>
   <div class="board">
     <div class="grid" @mousemove="handleMouseMove" ref="board">
-      <div
-        v-for="(_, index) in G?.cells"
-        :class="{ cell: true, 'cell-hover': isHovering(index) }"
-        :key="index"
-        :style="`background: ${index % 2 === Math.floor(index / 8) % 2 ? 'white' : 'black'}`"
-        @click="handleClick(index)"
-      ></div>
-      <div
-        v-for="cell in pieces"
-        :key="cell.piece?.id"
-        :style="{
-          transform: getTransform(cell.index),
-          zIndex: cell?.index === selectedPiece ? 5 : 1
-        }"
-        :class="{ 'piece-wrapper': true, animated: dragCoords === null }"
-        @mousedown="handleMouseDown($event, cell.index)"
-        @mouseup="handleMouseUp"
-      >
-        <div
-          :class="{
-            piece: true,
-            'piece-white': cell?.piece?.player === Player.White,
-            'piece-black': cell?.piece?.player === Player.Black,
-            'piece-selected': cell?.index === selectedPiece,
-            'piece-movable': validMoves.some((move) => move.from === cell.index),
-            animated: true
-          }"
-        ></div>
+      <div v-for="(_, index) in  G?.cells " :class="{
+        cell: true, 'cell-hover': isHovering(index),
+        'bg-gray-200': (index % 2 === Math.floor(index / 8) % 2)
+      }" :key="index" class="bg-gray-100" @click="handleClick(index)">
+      </div>
+      <div v-for=" cell  in  pieces " :key="cell.piece?.id" :style="{
+        transform: getTransform(cell.index),
+        zIndex: cell?.index === selectedPiece ? 5 : 1
+      }
+        " :class="{ 'piece-wrapper': true, animated: dragCoords === null }"
+        @mousedown="handleMouseDown($event, cell.index)" @mouseup="handleMouseUp">
+        <div :class="{
+          piece: true,
+          'piece-white': cell?.piece?.player === Player.White,
+          'piece-black': cell?.piece?.player === Player.Black,
+          'piece-selected': cell?.index === selectedPiece,
+          'piece-movable': validMoves.some((move) => move.from === cell.index),
+          animated: true
+        }
+          "></div>
       </div>
       <template v-if="selectedPiece !== null">
-        <div
-          v-for="(valid, index) in validMoves.filter((move) => move.from === selectedPiece)"
-          :key="index"
-          :style="`transform: ${getTransform(valid.to)}`"
-          class="piece-wrapper animated"
-          @click="handleClick(valid.to)"
-        >
+        <div v-for="( valid, index ) in  validMoves.filter((move) => move.from === selectedPiece) " :key="index"
+          :style="`transform: ${getTransform(valid.to)}`" class="piece-wrapper animated" @click="handleClick(valid.to)">
           <div class="piece piece-cue"></div>
         </div>
       </template>

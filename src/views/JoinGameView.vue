@@ -55,12 +55,12 @@ const changeJoinState = () => {
         <span class="label-text">Nickname</span>
       </div>
       <input type="text" v-model="playerName" placeholder="Anonymous"
-        class="input input-bordered input-primary w-full max-w-xs" />
+        class="input input-bordered input-secondary w-full max-w-xs" />
       <div class="text-error">
         {{ err }}
       </div>
     </div>
-    <input type="checkbox" aria-label="Ready" class="btn btn-success" @change="changeJoinState" v-bind:checked="!ready"
-      v-bind:disabled="err != ''" />
+    <input type="checkbox" aria-label="Ready" class="btn checked:!bg-secondary checked:!border-secondary btn-success"
+      @change="changeJoinState" v-bind:checked="!ready" v-bind:disabled="err != ''" />
   </div>
 </template>

@@ -48,7 +48,7 @@ watch(state, () => {
 
     // Push to results page
     router.push({
-      name: 'results',
+      name: 'result',
       params: {
         winner: state.value.ctx.gameover.winner == client.value.playerID ? '0' : '1',
         gameElapsed: gameElapsed.value,
@@ -92,7 +92,9 @@ onUnmounted(() => {
       <div class="p-4 bg-gray-100 rounded-xl flex flex-col gap-3">
         <div class="flex justify-between">
           <div class="text-lg font-bold">Game</div>
-          <div class="font-bold">{{ state.ctx.currentPlayer === client.playerID ? "Your turn" : "Enemy turn" }}</div>
+          <div class="font-bold text-primary">{{ state.ctx.currentPlayer === client.playerID ? "Your turn" : "Enemy turn"
+          }}
+          </div>
         </div>
         <div class="flex flex-col gap-1">
           <div class="flex justify-between">
@@ -116,9 +118,9 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <Chat :client="client" :state="state" />
+      <Chat :client="client" :state="state" class="grow" />
     </div>
-    <Board :G="state.G" :moves="client.moves" :ctx="state.ctx" />
+    <Board :G="state.G" :moves="client.moves" :ctx="state.ctx" class="rounded-xl overflow-hidden" />
   </div>
   <p v-else>loading...</p>
 </template>
