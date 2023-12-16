@@ -7,6 +7,7 @@ import Board from '../components/Board.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from '../store'
 import Chat from '../components/Chat.vue'
+import { Step, MCTSBot } from 'boardgame.io/ai'
 
 const store = useStore()
 const route = useRoute()
@@ -40,6 +41,7 @@ const updateTime = () => {
 const client = ref()
 const unsubscribe = ref()
 const state = ref()
+const bot = ref()
 
 watch(state, () => {
   if (state.value.ctx.gameover) {
@@ -57,12 +59,24 @@ watch(state, () => {
   }
 })
 
+const testBot = async () => {
+  console.log('Predicting move')
+  const action = await Step(client.value, bot.value)
+  console.log(action.payload)
+}
+
 onMounted(() => {
   client.value = Client({
     game: Checkers
   })
   client.value.start()
-  unsubscribe.value = client.value.subscribe((newState: any) => {
+  bot.value = new MCTSBot({
+    game: client.value.game,
+    enumerate: client.value.game.ai.enumerate,
+    iterationCallback: () => {} // Maybe add a loading indicator
+  })
+
+  unsubscribe.value = client.value.subscribe(async (newState: any) => {
     state.value = newState
   })
 
@@ -119,7 +133,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <Chat :client="client" :state="state" class="grow" />
+      <button @click="testBot">TestBot</button>
     </div>
     <Board :G="state.G" :moves="client.moves" :ctx="state.ctx" class="rounded-xl overflow-hidden" />
   </div>
