@@ -32,15 +32,15 @@ onMounted(() => {
     const oldState = gameStore.state
     gameStore.state = newState
     gameStore.messages = gameStore.client.chatMessages
+    gameStore.players = gameStore.client.matchData
 
-    // // If its another turn, push to history
-    // if (newState.ctx?.turn !== oldState.ctx?.turn) {
-    //   console.log('pice')
-    //   gameStore.gameHistory.push(newState)
-    // }
+    // If its another turn, push to history
+    if (!oldState || newState.ctx?.turn !== oldState.ctx?.turn) {
+      gameStore.gameHistory.push(newState)
+    }
 
     if (newState.ctx.gameover) {
-      gameStore.winner = newState.ctx.gameover.winner
+      gameStore.winner = newState.ctx.gameover.winner == gameStore.client.playerID
       clearInterval(gameStore.gameInterval)
       router.push('result')
     }
