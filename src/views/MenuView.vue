@@ -25,6 +25,10 @@ const playWithAi = () => {
   router.push('/play-with-ai')
 }
 
+const playLocally = () => {
+  router.push('/play-locally')
+}
+
 store.playerID = store.playerCredentials = store.matchID = store.playerName = store.lobbyIdentifier = ''
 gameStore.messages = gameStore.players = gameStore.winner = null
 gameStore.gameElapsedSeconds = gameStore.clientElapsedSeconds = 0
@@ -38,6 +42,7 @@ gameStore.gameElapsedSeconds = gameStore.clientElapsedSeconds = 0
       <button class="btn btn-secondary btn-wide" @click="playWithFriend">Play with a friend</button>
       <button class="btn btn-secondary btn-wide" @click="playPublic">Play public</button>
       <button class="btn btn-secondary btn-wide" @click="playWithAi">Play with a bot</button>
+      <button class="btn btn-secondary btn-wide" @click="playLocally">Play locally</button>
     </div>
   </div>
 </template>
