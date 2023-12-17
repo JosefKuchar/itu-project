@@ -1,3 +1,9 @@
+/**
+ * Router for the application
+ *
+ * @author Josef Kuchař (xkucha28)
+ */
+
 import { createRouter, createWebHistory } from 'vue-router'
 import GameView from '../views/GameView.vue'
 import MenuView from '@/views/MenuView.vue'

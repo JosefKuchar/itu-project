@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * Local game
+ *
+ * @author Josef Kuchař (xkucha28)
+ */
+
 import { Checkers } from '../game'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { Client } from 'boardgame.io/client'

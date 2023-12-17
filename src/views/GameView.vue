@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * Game view component
+ *
+ * @author Josef Kuchař (xkucha28)
+ */
+
 import { Checkers } from '../game'
 import { onMounted, onUnmounted, watch } from 'vue'
 import { Client } from 'boardgame.io/client'
@@ -32,7 +38,7 @@ onMounted(() => {
     gameStore.messages = gameStore.client.chatMessages
     gameStore.players = gameStore.client.matchData
 
-    // If its another turn, push to history 
+    // If its another turn, push to history
     if (!oldState || newState.ctx?.turn !== oldState.ctx?.turn) {
       gameStore.gameHistory.push(newState)
     }
