@@ -53,18 +53,21 @@ const changeJoinState = () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-y-3">
-    <div>
+  <div class="flex flex-col gap-y-3 w-[500px]">
+    <div class='w-full'>
       <div class="label">
         <span class="label-text">Nickname</span>
       </div>
       <input type="text" v-model="playerName" placeholder="Anonymous"
-        class="input input-bordered input-secondary w-full max-w-xs" />
+        class="input input-bordered input-secondary w-full" />
       <div class="text-error">
         {{ err }}
       </div>
     </div>
-    <input type="checkbox" aria-label="Ready" class="btn checked:!bg-secondary checked:!border-secondary btn-success"
+    <input type="checkbox" aria-label="Ready" class="btn checked:!bg-secondary checked:!border-secondary btn-success gap-y-6"
       @change="changeJoinState" v-bind:checked="!ready" v-bind:disabled="err != ''" />
+    <p class="text-center text-sm">
+      The game will start automatically when both players are ready
+    </p>
   </div>
 </template>
