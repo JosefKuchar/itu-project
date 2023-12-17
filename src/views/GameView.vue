@@ -21,6 +21,7 @@ onMounted(() => {
     playerID: store.playerID,
     credentials: store.playerCredentials,
     matchID: store.matchID,
+    debug: false
   })
   gameStore.client.start()
   gameStore.players = gameStore.client.matchData

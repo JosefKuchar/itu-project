@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-import { watch, ref } from 'vue';
-import { useGameStore } from '../store/gameStore';
-import { gameEvent } from 'boardgame.io/dist/types/src/core/action-creators';
+import { ref } from 'vue'
+import { useGameStore } from '../store/gameStore'
 
-const gameStore = useGameStore();
-const message = ref('');
+const gameStore = useGameStore()
+const message = ref('')
 
 const onSubmit = () => {
   if (message.value) {
-    gameStore.sendMessage(message.value);
-    message.value = '';
+    gameStore.sendMessage(message.value)
+    message.value = ''
   }
 }
 </script>
@@ -29,8 +28,13 @@ const onSubmit = () => {
       </div>
     </div>
     <div class="flex gap-2">
-      <input @keyup.enter="onSubmit" v-model="message" type="text" placeholder="Write a message..."
-        class="input text-sm input-bordered w-full" />
+      <input
+        @keyup.enter="onSubmit"
+        v-model="message"
+        type="text"
+        placeholder="Write a message..."
+        class="input text-sm input-bordered w-full"
+      />
       <button @click="onSubmit" class="btn btn-primary">Send</button>
     </div>
   </div>
