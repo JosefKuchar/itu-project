@@ -1,46 +1,44 @@
-# itu-project
+# ITU projekt
 
-This template should help get you started developing with Vue 3 in Vite.
+## Autoři
 
-## Recommended IDE Setup
+- `xkucha28` Josef Kuchař
+- `xsirov00` Matej Sirovatka
+- `xbenci01` Šimon Benčík
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Instalace
 
-## Type Support for `.vue` Imports in TS
+### Prerekvizity
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+`Node v16+` - https://nodejs.org/
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+### Samotná instalace
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+`npm install`
 
-## Customize configuration
+## Spuštění projektu
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+### Spuštění frontendu
 
-## Project Setup
+`npm run dev`
 
-```sh
-npm install
-```
+### Spuštění backendu
 
-### Compile and Hot-Reload for Development
+`npm run server`
 
-```sh
-npm run dev
-```
+## Použité knihovny a technologie
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+- Node.js - https://nodejs.org/ (MIT Licence)
+- Heroicons - https://heroicons.com/ (MIT Licence)
+- Boardgame.io - https://boardgame.io/ (MIT Licence)
+- Pinia - https://pinia.vuejs.org/ (MIT Licence)
+- Vue.js - https://vuejs.org/ (MIT Licence)
+- Vue Router - https://router.vuejs.org/ (MIT Licence)
+- PostCSS - https://postcss.org/ (MIT Licence)
+- PostCSS Autoprefixer - https://autoprefixer.github.io/ (MIT Licence)
+- DaisyUI - https://daisyui.com/ (MIT Licence)
+- ESLint - https://eslint.org/ (MIT Licence)
+- Prettier - https://prettier.io/ (MIT Licence)
+- TailwindCSS - https://tailwindcss.com/ (MIT Licence)
+- Vite - https://vitejs.dev/ (MIT Licence)
+- Typescript - https://www.typescriptlang.org/ (Apache Licence 2.0)
