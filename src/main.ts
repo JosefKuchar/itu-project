@@ -1,3 +1,9 @@
+/**
+ * Frontend entry point
+ *
+ * @author Josef Kuchař (xkucha28)
+ */
+
 import './assets/main.css'
 
 import { createApp } from 'vue'

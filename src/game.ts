@@ -1,3 +1,9 @@
+/**
+ * Game logic
+ *
+ * @author Josef Kuchař (xkucha28)
+ */
+
 import type { Game } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 

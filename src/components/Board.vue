@@ -1,4 +1,10 @@
 <script lang="ts" setup>
+/**
+ * Game board component
+ *
+ * @author Josef Kuchař (xkucha28)
+ */
+
 import { computed, ref } from 'vue'
 import { type Piece, type GameState, Player, getValidMoves, calculateIndex } from '../game'
 import type { Ctx } from 'boardgame.io'
@@ -14,7 +20,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  replay: false,
+  replay: false
 })
 
 const selectedPiece = ref<number | null>(null)
@@ -215,7 +221,7 @@ const toggleAuto = () => {
 }
 
 .piece-white {
-  background: #DB5461;
+  background: #db5461;
 }
 
 .piece-movable {
@@ -258,30 +264,47 @@ const toggleAuto = () => {
 <template>
   <div class="board rounded-xl overflow-hidden">
     <div class="grid" @mousemove="handleMouseMove" ref="board">
-      <div v-for="(_, index) in gameState.cells " :class="{
-        cell: true, 'cell-hover': isHovering(index),
-        'bg-gray-200': (index % 2 === Math.floor(index / 8) % 2)
-      }" :key="index" class="bg-gray-100" @click="handleClick(index)">
-      </div>
-      <div v-for=" cell  in  pieces " :key="cell.piece?.id" :style="{
-        transform: getTransform(cell.index),
-        zIndex: cell?.index === selectedPiece ? 5 : 1
-      }
-        " :class="{ 'piece-wrapper': true, animated: dragCoords === null }"
-        @mousedown="handleMouseDown($event, cell.index)" @mouseup="handleMouseUp">
-        <div :class="{
-          piece: true,
-          'piece-white': cell?.piece?.player === Player.White,
-          'piece-black': cell?.piece?.player === Player.Black,
-          'piece-selected': cell?.index === selectedPiece,
-          'piece-movable': validMoves.some((move) => move.from === cell.index),
-          animated: true
-        }
-          "></div>
+      <div
+        v-for="(_, index) in gameState.cells"
+        :class="{
+          cell: true,
+          'cell-hover': isHovering(index),
+          'bg-gray-200': index % 2 === Math.floor(index / 8) % 2
+        }"
+        :key="index"
+        class="bg-gray-100"
+        @click="handleClick(index)"
+      ></div>
+      <div
+        v-for="cell in pieces"
+        :key="cell.piece?.id"
+        :style="{
+          transform: getTransform(cell.index),
+          zIndex: cell?.index === selectedPiece ? 5 : 1
+        }"
+        :class="{ 'piece-wrapper': true, animated: dragCoords === null }"
+        @mousedown="handleMouseDown($event, cell.index)"
+        @mouseup="handleMouseUp"
+      >
+        <div
+          :class="{
+            piece: true,
+            'piece-white': cell?.piece?.player === Player.White,
+            'piece-black': cell?.piece?.player === Player.Black,
+            'piece-selected': cell?.index === selectedPiece,
+            'piece-movable': validMoves.some((move) => move.from === cell.index),
+            animated: true
+          }"
+        ></div>
       </div>
       <template v-if="selectedPiece !== null">
-        <div v-for="( valid, index ) in  validMoves.filter((move) => move.from === selectedPiece) " :key="index"
-          :style="`transform: ${getTransform(valid.to)}`" class="piece-wrapper animated" @click="handleClick(valid.to)">
+        <div
+          v-for="(valid, index) in validMoves.filter((move) => move.from === selectedPiece)"
+          :key="index"
+          :style="`transform: ${getTransform(valid.to)}`"
+          class="piece-wrapper animated"
+          @click="handleClick(valid.to)"
+        >
           <div class="piece piece-cue"></div>
         </div>
       </template>
@@ -290,9 +313,7 @@ const toggleAuto = () => {
   <div class="flex justify-between gap-2 mt-4" v-if="replay">
     <div class="flex gap-2">
       <RouterLink to="/">
-        <button class="btn btn-secondary">
-          Exit
-        </button>
+        <button class="btn btn-secondary">Exit</button>
       </RouterLink>
       <div class="flex items-center gap-1 px-4 border border-gray-400 rounded-xl">
         <div class="font-semibold">Turn:</div>

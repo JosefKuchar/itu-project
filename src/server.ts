@@ -1,3 +1,9 @@
+/**
+ * Server entry point
+ *
+ * @author Josef Kuchař (xkucha28)
+ */
+
 import { Server, Origins } from 'boardgame.io/server'
 import { Checkers } from './game'
 

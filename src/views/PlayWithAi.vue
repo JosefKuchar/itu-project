@@ -1,16 +1,18 @@
 <script setup lang="ts">
+/**
+ * Play with AI page
+ *
+ * @author Josef Kuchař (xkucha28)
+ */
+
 import { Checkers } from '../game'
 import { computed, ref, watch } from 'vue'
 import { onMounted, onUnmounted } from 'vue'
 import { Client } from 'boardgame.io/client'
 import Board from '../components/Board.vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useStore } from '../store'
-import Chat from '../components/Chat.vue'
+import { useRouter } from 'vue-router'
 import { Step, MCTSBot } from 'boardgame.io/ai'
 
-const store = useStore()
-const route = useRoute()
 const router = useRouter()
 
 const startOfGame = ref()
@@ -73,6 +75,7 @@ onMounted(() => {
   bot.value = new MCTSBot({
     game: client.value.game,
     enumerate: client.value.game.ai.enumerate,
+    // playoutDepth: 2, // So it's fast for development
     iterationCallback: () => {} // Maybe add a loading indicator
   })
 
