@@ -6,7 +6,14 @@
  */
 
 import { computed, ref } from 'vue'
-import { type Piece, type GameState, Player, getValidMoves, calculateIndex } from '../game'
+import {
+  type Piece,
+  type GameState,
+  Player,
+  getValidMoves,
+  calculateIndex,
+  PieceType
+} from '../game'
 import { useStore } from '../store'
 import { useGameStore } from '../store/gameStore'
 
@@ -198,6 +205,13 @@ const handleMouseMove = (e: any) => {
   background: #222;
 }
 
+.piece-king {
+  background-image: url('../assets/king.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 2.5rem;
+}
+
 .piece-black.piece-movable {
   @apply border-4 border-primary;
 }
@@ -255,6 +269,7 @@ const handleMouseMove = (e: any) => {
             'piece-black': cell?.piece?.player === Player.Black,
             'piece-selected': cell?.index === selectedPiece,
             'piece-movable': validMoves.some((move) => move.from === cell.index),
+            'piece-king': cell?.piece?.type === PieceType.King,
             animated: true
           }"
         ></div>
