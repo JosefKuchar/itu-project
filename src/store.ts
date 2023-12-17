@@ -1,6 +1,9 @@
+/**
+ * @author Matej Sirovatka (xsirov00)
+ */
 import { defineStore } from 'pinia'
 import { LobbyClient } from 'boardgame.io/client'
-import router from "@/router";
+import router from '@/router'
 
 type StoreState = {
   lobbyClient: LobbyClient
@@ -23,35 +26,39 @@ export const useStore = defineStore('store', {
 
   actions: {
     joinMatch(matchID: string) {
-      this.lobbyClient.joinMatch('checkers', matchID, {
-        playerName: 'Anonymous',
-        data: {
-          ready: false
-        }
-      }).then((c: any) => {
-        this.$patch({
-          playerCredentials: c.playerCredentials,
-          playerID: c.playerID,
-          matchID: matchID
+      this.lobbyClient
+        .joinMatch('checkers', matchID, {
+          playerName: 'Anonymous',
+          data: {
+            ready: false
+          }
         })
-      })
+        .then((c: any) => {
+          this.$patch({
+            playerCredentials: c.playerCredentials,
+            playerID: c.playerID,
+            matchID: matchID
+          })
+        })
       router.push({ path: '/join-game' })
     },
 
     leaveMatch() {
-      this.lobbyClient.leaveMatch('checkers', this.matchID, {
-        playerID: this.playerID,
-        credentials: this.playerCredentials
-      }).then(() => {
-        this.$patch({
-          playerCredentials: '',
-          playerID: '',
-          matchID: ''
+      this.lobbyClient
+        .leaveMatch('checkers', this.matchID, {
+          playerID: this.playerID,
+          credentials: this.playerCredentials
         })
-      })
-    },
+        .then(() => {
+          this.$patch({
+            playerCredentials: '',
+            playerID: '',
+            matchID: ''
+          })
+        })
+    }
   },
   persist: {
     storage: sessionStorage
   }
-});
+})
