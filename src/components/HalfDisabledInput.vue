@@ -15,7 +15,7 @@ const props = defineProps({
 const editableValue = ref(props.gameLink);
 const url = ref(window.location.origin);
 const { copy, copied } = useClipboard({ source: editableValue })
-const emit = defineEmits(['copy']);
+const emit = defineEmits(['copy', 'input-change']);
 
 /**
  * Focuses input when clicked on the non-editable part

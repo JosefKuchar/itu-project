@@ -41,7 +41,6 @@ const handleInputChange = (event: string) => {
  * @param event
  */
 const handleCopy = (event: boolean) => {
-  console.log(event);
   copySucceded.value = event;
   hasCopied.value = true;
 
