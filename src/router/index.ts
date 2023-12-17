@@ -86,6 +86,7 @@ const router = createRouter({
   ]
 })
 
+// Leave match when leaving game
 router.beforeEach((to, from, next) => {
   if (from.name === 'join-game' && to.name !== 'game') {
     useStore().leaveMatch()

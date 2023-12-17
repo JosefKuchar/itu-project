@@ -37,6 +37,7 @@ const dragCoords = ref<{ x: number; y: number; cornerX: number; cornerY: number 
 const dragging = ref(false)
 const startCoords = ref<{ x: number; y: number } | null>(null)
 
+// Get transform for coordinate on board
 const getTransform = (index?: number) => {
   if (typeof index !== 'number') return ''
   let x, y
@@ -50,6 +51,7 @@ const getTransform = (index?: number) => {
   return `translate(${x * 100}%, ${y * 100}%)`
 }
 
+// Get pieces from state
 const pieces = computed(
   () =>
     (props.state as GameState)?.cells
@@ -58,6 +60,7 @@ const pieces = computed(
       .sort((a, b) => a.piece!.id! - b.piece!.id!) as { piece: Piece; index: number }[]
 )
 
+// Get valid moves for current player
 const validMoves = computed(() => {
   if (props.replay) return []
   if (!props.local) {
@@ -67,6 +70,7 @@ const validMoves = computed(() => {
   return getValidMoves(gameStore.state.G, gameStore.state.ctx.currentPlayer)
 })
 
+// Handle click on cell/piece
 const handleClick = (value: number) => {
   if (props.replay) return
   if (!props.local) {
@@ -81,6 +85,7 @@ const handleClick = (value: number) => {
   }
 }
 
+// Check if piece is hovering
 const isHovering = (index: number) => {
   if (dragCoords.value === null) return false
   return (
@@ -89,6 +94,7 @@ const isHovering = (index: number) => {
   )
 }
 
+// Handle mouse down on piece
 const handleMouseDown = (e: MouseEvent, index: number) => {
   if (props.replay) return
   selectedPiece.value = index
@@ -96,11 +102,13 @@ const handleMouseDown = (e: MouseEvent, index: number) => {
   dragging.value = true
 }
 
+// Handle mouse up on piece
 const handleMouseUp = (e: MouseEvent) => {
   if (props.replay) return
   if (startCoords.value) {
     const diffX = e.pageX - startCoords.value.x
     const diffY = e.pageY - startCoords.value.y
+    // Hysteresis
     if (Math.abs(diffX) < 5 && Math.abs(diffY) < 5) {
       dragCoords.value = null
       dragging.value = false
@@ -127,6 +135,7 @@ const handleMouseUp = (e: MouseEvent) => {
   dragCoords.value = null
 }
 
+// Handle mouse move on board
 const handleMouseMove = (e: any) => {
   if (board.value && selectedPiece.value !== null && dragging.value) {
     const rawX = e.clientX - board.value.offsetLeft
