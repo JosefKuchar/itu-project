@@ -20,6 +20,7 @@ onMounted(() => {
     playerID: store.playerID,
     credentials: store.playerCredentials,
     matchID: store.matchID,
+    debug: false
   })
   gameStore.client.start()
   gameStore.unsubscribe = gameStore.client.subscribe((newState: any) => {
@@ -28,7 +29,7 @@ onMounted(() => {
     gameStore.state = newState
     gameStore.messages = gameStore.client.chatMessages
 
-    // If its another turn, push to history 
+    // If its another turn, push to history
     if (newState.ctx?.turn !== oldState.ctx?.turn) {
       console.log('pice')
       gameStore.gameHistory.push(newState)
@@ -64,9 +65,12 @@ onUnmounted(() => {
       <div class="p-4 bg-gray-100 rounded-xl flex flex-col gap-3">
         <div class="flex justify-between">
           <div class="text-lg font-bold">Game</div>
-          <div class="font-bold text-primary">{{ gameStore.state.ctx.currentPlayer === gameStore.client.playerID ?
-            "Your turn" : "Enemy turn"
-          }}
+          <div class="font-bold text-primary">
+            {{
+              gameStore.state.ctx.currentPlayer === gameStore.client.playerID
+                ? 'Your turn'
+                : 'Enemy turn'
+            }}
           </div>
         </div>
         <div class="flex flex-col gap-1">
@@ -81,12 +85,21 @@ onUnmounted(() => {
         </div>
         <div class="flex flex-col gap-1">
           <div v-for="player in gameStore.client.matchData" class="flex gap-2 items-center">
-            <div class="h-3 w-3 border rounded-full transition-all ease-in-out"
-              :class="gameStore.state.ctx.currentPlayer == player.id ? 'bg-gray-900 border-gray-900' : 'bg-transparent border-gray-400'">
-            </div>
-            <div class="font-semibold text-sm transition-all ease-in-out"
-              :class="gameStore.state.ctx.currentPlayer == player.id ? 'text-gray-900' : 'text-gray-600'">{{ player.name
-              }}
+            <div
+              class="h-3 w-3 border rounded-full transition-all ease-in-out"
+              :class="
+                gameStore.state.ctx.currentPlayer == player.id
+                  ? 'bg-gray-900 border-gray-900'
+                  : 'bg-transparent border-gray-400'
+              "
+            ></div>
+            <div
+              class="font-semibold text-sm transition-all ease-in-out"
+              :class="
+                gameStore.state.ctx.currentPlayer == player.id ? 'text-gray-900' : 'text-gray-600'
+              "
+            >
+              {{ player.name }}
             </div>
           </div>
         </div>

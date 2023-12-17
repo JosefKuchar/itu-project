@@ -6,9 +6,9 @@ import PlayWithFriendView from '@/views/PlayWithFriendView.vue'
 import PlayPublicView from '@/views/PlayPublicView.vue'
 import PlayWithAi from '@/views/PlayWithAi.vue'
 import JoinGameView from '@/views/JoinGameView.vue'
-import JoinFriendGameView from "@/views/JoinFriendGameView.vue";
-import ResultView from "@/views/ResultView.vue";
-import ReplayView from "@/views/ReplayView.vue";
+import JoinFriendGameView from '@/views/JoinFriendGameView.vue'
+import ResultView from '@/views/ResultView.vue'
+import ReplayView from '@/views/ReplayView.vue'
 
 import { useStore } from '@/store'
 
@@ -23,17 +23,17 @@ const router = createRouter({
     {
       path: '/create-lobby',
       name: 'create-lobby',
-      component: CreateLobbyView,
+      component: CreateLobbyView
     },
     {
       path: '/play-with-friend',
       name: 'play-with-friend',
-      component: PlayWithFriendView,
+      component: PlayWithFriendView
     },
     {
       path: '/play-public',
       name: 'play-public',
-      component: PlayPublicView,
+      component: PlayPublicView
     },
     {
       path: '/play-with-ai',
@@ -43,32 +43,31 @@ const router = createRouter({
     {
       path: '/',
       name: 'menu',
-      component: MenuView,
+      component: MenuView
     },
     {
       path: '/join-game',
       name: 'join-game',
-      component: JoinGameView,
+      component: JoinGameView
     },
     {
       path: '/join-friend-game/:id',
       name: 'join-friend-game',
-      component: JoinFriendGameView,
+      component: JoinFriendGameView
     },
     {
       path: '/result',
       name: 'result',
-      component: ResultView,
+      component: ResultView
     },
     {
       path: '/replay',
       name: 'replay',
-      component: ReplayView,
+      component: ReplayView
     }
   ]
 })
 
-// TODO: I hate this
 router.beforeEach((to, from, next) => {
   if (from.name === 'join-game' && to.name !== 'game') {
     useStore().leaveMatch()
