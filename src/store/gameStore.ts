@@ -80,7 +80,7 @@ export const useGameStore = defineStore('game', () => {
     gameHistory.value = JSON.parse(localStorage.getItem('gameHistory') || '[]')
   }
 
-  watch(clientElapsedSeconds, () => {
+  watch(gameElapsedSeconds, () => {
     save()
   })
 
