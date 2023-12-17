@@ -1,10 +1,16 @@
 <script lang="ts" setup>
+/**
+ * Ingame chat component
+ *
+ * @author Šimon Benčík (xbenci01)
+ */
 import { ref } from 'vue'
 import { useGameStore } from '../store/gameStore'
 
 const gameStore = useGameStore()
 const message = ref('')
 
+// Handles sending message
 const onSubmit = () => {
   if (message.value) {
     gameStore.sendMessage(message.value)
@@ -28,13 +34,8 @@ const onSubmit = () => {
       </div>
     </div>
     <div class="flex gap-2">
-      <input
-        @keyup.enter="onSubmit"
-        v-model="message"
-        type="text"
-        placeholder="Write a message..."
-        class="input text-sm input-bordered w-full"
-      />
+      <input @keyup.enter="onSubmit" v-model="message" type="text" placeholder="Write a message..."
+        class="input text-sm input-bordered w-full" />
       <button @click="onSubmit" class="btn btn-primary">Send</button>
     </div>
   </div>
