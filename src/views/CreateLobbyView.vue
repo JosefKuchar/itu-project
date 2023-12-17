@@ -21,6 +21,9 @@ onUnmounted(() => {
   clearInterval(interval.value)
 })
 
+/**
+ * Updates list of matches
+ */
 const updateMatches = () => {
   store.lobbyClient.listMatches('checkers').then((m: any) => {
     matches.value = m.matches

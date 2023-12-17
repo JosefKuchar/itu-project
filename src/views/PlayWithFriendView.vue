@@ -26,12 +26,20 @@ onUnmounted(() => {
   });
 });
 
+/**
+ * Handles the input change of the link input
+ * @param event event with the value
+ */
 const handleInputChange = (event: string) => {
   store.$patch((state) => {
     state.lobbyIdentifier = event;
   });
 };
 
+/**
+ * Handles the copy event to display a toast
+ * @param event
+ */
 const handleCopy = (event: boolean) => {
   console.log(event);
   copySucceded.value = event;

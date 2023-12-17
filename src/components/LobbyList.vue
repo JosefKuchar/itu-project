@@ -27,6 +27,9 @@ onUnmounted(() => {
   clearInterval(interval.value)
 })
 
+/**
+ * Updates list of matches
+ */
 const updateMatches = () => {
   store.lobbyClient.listMatches('checkers').then((m: any) => {
     matches.value = m.matches.filter((match: any) => match.setupData.lobbyIdentifier == "")
@@ -34,6 +37,11 @@ const updateMatches = () => {
 }
 
 
+/**
+ * Computes current capacity of the match
+ * @param match Match to compute capacity of
+ * @returns Capacity of the match
+ */
 const computeCapacity = (match: LobbyAPI.Match) => {
   if (match.players[0].name != undefined && match.players[1].name != undefined) {
     return 2;

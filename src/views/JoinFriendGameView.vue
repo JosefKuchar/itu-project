@@ -13,6 +13,7 @@ const gameIdParam = route.params.id;
 
 const err = ref('');
 
+// Finds the game with the given id and tries to join it, sets error value in case of error
 store.lobbyClient.listMatches('checkers').then((m) => {
   const game = m.matches.find((match) => match.setupData.lobbyIdentifier === gameIdParam);
   if (game) {

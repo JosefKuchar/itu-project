@@ -9,6 +9,9 @@ const store = useStore();
 
 const inputValue = ref('')
 
+/**
+ * Creates a match with given name
+ */
 const createMatch = () => {
   store.lobbyClient
     .createMatch('checkers', {

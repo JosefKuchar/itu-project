@@ -24,6 +24,9 @@ onUnmounted(() => {
 
 })
 
+/**
+ * Checks if both players are ready and starts the game if they are
+ */
 const checkIfBothReady = () => {
   store.lobbyClient.getMatch('checkers', store.matchID).then((m: any) => {
     if (m.players[0].data.ready && m.players[1].data.ready) {
