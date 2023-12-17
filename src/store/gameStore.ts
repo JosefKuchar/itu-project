@@ -66,6 +66,25 @@ export const useGameStore = defineStore('game', () => {
     });
   }
 
+  // Persist start of game and client elapsed time
+  const save = () => {
+    localStorage.setItem('gameElapsedSeconds', String(gameElapsedSeconds.value))
+    localStorage.setItem('clientElapsedSeconds', String(clientElapsedSeconds.value))
+    localStorage.setItem('gameHistory', JSON.stringify(gameHistory.value))
+  }
+
+  // Load start of game and client elapsed time
+  const load = () => {
+    gameElapsedSeconds.value = Number(localStorage.getItem('gameElapsedSeconds'))
+    clientElapsedSeconds.value = Number(localStorage.getItem('clientElapsedSeconds'))
+    gameHistory.value = JSON.parse(localStorage.getItem('gameHistory') || '[]')
+  }
+
+  watch(clientElapsedSeconds, () => {
+    save()
+  })
+
+  load()
   return {
     gameElapsedSeconds,
     clientElapsedSeconds,

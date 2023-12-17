@@ -32,6 +32,7 @@ const playLocally = () => {
 store.playerID = store.playerCredentials = store.matchID = store.playerName = store.lobbyIdentifier = ''
 gameStore.messages = gameStore.players = gameStore.winner = null
 gameStore.gameElapsedSeconds = gameStore.clientElapsedSeconds = 0
+gameStore.gameHistory = []
 </script>
 
 <template>
