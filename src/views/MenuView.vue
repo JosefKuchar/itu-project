@@ -20,6 +20,10 @@ const playWithAi = () => {
   router.push('/play-with-ai')
 }
 
+const playLocally = () => {
+  router.push('/play-locally')
+}
+
 // Clear local storage
 localStorage.removeItem('matchID');
 localStorage.removeItem('playerID');
@@ -36,6 +40,7 @@ localStorage.removeItem('gameElapsedSeconds');
       <button class="btn btn-secondary btn-wide" @click="playWithFriend">Play with a friend</button>
       <button class="btn btn-secondary btn-wide" @click="playPublic">Play public</button>
       <button class="btn btn-secondary btn-wide" @click="playWithAi">Play with a bot</button>
+      <button class="btn btn-secondary btn-wide" @click="playLocally">Play locally</button>
     </div>
   </div>
 </template>
