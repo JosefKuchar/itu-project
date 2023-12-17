@@ -10,13 +10,12 @@ const gameStore = useGameStore()
 
 interface Props {
   state: any
-  replay: boolean
+  replay?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   replay: false
 })
-
 </script>
 
 <template>

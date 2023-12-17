@@ -15,7 +15,7 @@ const gameStore = useGameStore()
 
 interface Props {
   state: GameState
-  replay: boolean
+  replay?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
