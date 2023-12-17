@@ -3,11 +3,18 @@
 import CreateLobby from "@/components/CreateLobby.vue";
 import HalfDisabledInput from "@/components/HalfDisabledInput.vue";
 import {useStore} from "@/store";
-import {onUnmounted, ref} from "vue";
+import { onMounted, onUnmounted, ref } from 'vue'
 
 const store = useStore();
 const hasCopied = ref(false);
 const copySucceded = ref(false);
+const uuid = self.crypto.randomUUID().substring(0, 12);
+
+onMounted(() => {
+  store.$patch((state) => {
+    state.lobbyIdentifier = uuid;
+  });
+});
 
 onUnmounted(() => {
   store.$patch((state) => {
@@ -49,7 +56,7 @@ const handleCopy = (event: boolean) => {
     <p class="text-sm opacity-50">
       This lobby will be hidden from the lobby list.
     </p>
-    <HalfDisabledInput @input-change="handleInputChange" @copy="handleCopy"/>
+    <HalfDisabledInput v-bind:game-link='uuid' @input-change="handleInputChange" @copy="handleCopy"/>
   </div>
 </template>
 

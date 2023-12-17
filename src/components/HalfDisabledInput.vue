@@ -2,7 +2,14 @@
 import { ref } from 'vue';
 import { useClipboard } from '@vueuse/core'
 
-const editableValue = ref('');
+const props = defineProps({
+  gameLink: {
+    type: String,
+    required: true
+  }
+})
+
+const editableValue = ref(props.gameLink);
 const url = ref(window.location.origin);
 const { copy, copied } = useClipboard({ source: editableValue })
 const emit = defineEmits(['copy']);
