@@ -3,6 +3,11 @@
  * @author Matej Sirovatka (xsirov00)
  */
 import router from '@/router'
+import { useStore } from '@/store'
+import { useGameStore } from '@/store/gameStore';
+
+const store = useStore()
+const gameStore = useGameStore()
 
 const createMatch = () => {
   router.push('/create-lobby')
@@ -20,12 +25,9 @@ const playWithAi = () => {
   router.push('/play-with-ai')
 }
 
-// Clear local storage
-localStorage.removeItem('matchID');
-localStorage.removeItem('playerID');
-localStorage.removeItem('playerCredentials');
-localStorage.removeItem('clientElapsedSeconds');
-localStorage.removeItem('gameElapsedSeconds');
+store.playerID = store.playerCredentials = store.matchID = store.playerName = store.lobbyIdentifier = ''
+gameStore.messages = gameStore.players = gameStore.winner = null
+gameStore.gameElapsedSeconds = gameStore.clientElapsedSeconds = 0
 </script>
 
 <template>

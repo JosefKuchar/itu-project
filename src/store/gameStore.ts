@@ -16,13 +16,11 @@ export const useGameStore = defineStore('game', () => {
   const client = ref()
   const unsubscribe = ref()
   const state = ref()
-  const messages = ref([])
+  const messages = ref()
   const players = ref()
   const winner = ref()
 
   const gameHistory = ref<GameHistory[]>([])
-
-  const testCount = ref(0)
 
   const clientElapsed = computed(() => {
     const minutes = Math.floor(clientElapsedSeconds.value / 60)
@@ -61,22 +59,6 @@ export const useGameStore = defineStore('game', () => {
     return `${date.getHours()}:${date.getMinutes()}`;
   }
 
-  // Persist start of game and client elapsed time
-  const saveTimes = () => {
-    localStorage.setItem('gameElapsedSeconds', String(gameElapsedSeconds.value))
-    localStorage.setItem('clientElapsedSeconds', String(clientElapsedSeconds.value))
-  }
-
-  // Load start of game and client elapsed time
-  const loadTimes = () => {
-    gameElapsedSeconds.value = Number(localStorage.getItem('gameElapsedSeconds'))
-    clientElapsedSeconds.value = Number(localStorage.getItem('clientElapsedSeconds'))
-  }
-
-  watch(clientElapsedSeconds, () => {
-    saveTimes()
-  })
-
   function sendMessage(input: string) {
     client.value.sendChatMessage({
       message: input,
@@ -84,9 +66,9 @@ export const useGameStore = defineStore('game', () => {
     });
   }
 
-  loadTimes()
-
   return {
+    gameElapsedSeconds,
+    clientElapsedSeconds,
     gameElapsed,
     gameInterval,
     clientElapsed,
@@ -94,7 +76,6 @@ export const useGameStore = defineStore('game', () => {
     client,
     unsubscribe,
     state,
-    testCount,
     getPlayerName,
     getTime,
     sendMessage,

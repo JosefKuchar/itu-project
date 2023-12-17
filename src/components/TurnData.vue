@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useGameStore } from '@/store/gameStore';
 const gameStore = useGameStore()
+import { type GameState } from '@/game';
 
 interface Props {
+  state: any
   replay: boolean
 }
 
@@ -14,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
   <div class="p-4 bg-gray-100 rounded-xl flex flex-col gap-3">
-    <div class="flex justify-between">
+    <div class="flex justify-between" v-if="!replay">
       <div class="text-lg font-bold">Game</div>
       <div class="font-bold text-primary">{{ gameStore.state.ctx.currentPlayer === gameStore.client.playerID ?
         "Your turn" : "Enemy turn"
@@ -34,10 +36,10 @@ const props = withDefaults(defineProps<Props>(), {
     <div class="flex flex-col gap-1">
       <div v-for="player in gameStore.players" class="flex gap-2 items-center">
         <div class="h-3 w-3 border rounded-full transition-all ease-in-out"
-          :class="gameStore.state.ctx.currentPlayer == player.id ? 'bg-gray-900 border-gray-900' : 'bg-transparent border-gray-400'">
+          :class="state.ctx.currentPlayer == player.id ? 'bg-gray-900 border-gray-900' : 'bg-transparent border-gray-400'">
         </div>
         <div class="font-semibold text-sm transition-all ease-in-out"
-          :class="gameStore.state.ctx.currentPlayer == player.id ? 'text-gray-900' : 'text-gray-600'">{{ player.name
+          :class="state.ctx.currentPlayer == player.id ? 'text-gray-900' : 'text-gray-600'">{{ player.name
           }}
         </div>
       </div>

@@ -51,7 +51,4 @@ export const useStore = defineStore('store', {
       })
     },
   },
-  persist: {
-    storage: window.sessionStorage,
-  }
 });

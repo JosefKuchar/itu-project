@@ -24,22 +24,21 @@ onMounted(() => {
     debug: false
   })
   gameStore.client.start()
-  gameStore.players = gameStore.client.matchData
 
   gameStore.unsubscribe = gameStore.client.subscribe((newState: any) => {
     if (newState == null) return
     const oldState = gameStore.state
     gameStore.state = newState
     gameStore.messages = gameStore.client.chatMessages
+    gameStore.players = gameStore.client.matchData
 
-    console.log(newState.ctx?.turn, oldState.ctx?.turn)
     // If its another turn, push to history 
-    if (newState.ctx?.turn !== oldState.ctx?.turn) {
+    if (!oldState || newState.ctx?.turn !== oldState.ctx?.turn) {
       gameStore.gameHistory.push(newState)
     }
 
     if (newState.ctx.gameover) {
-      gameStore.winner = newState.ctx.gameover.winner
+      gameStore.winner = newState.ctx.gameover.winner == gameStore.client.playerID
       clearInterval(gameStore.gameInterval)
       router.push('result')
     }
@@ -60,7 +59,7 @@ onUnmounted(() => {
 <template>
   <div v-if="gameStore.state" class="flex gap-4">
     <div class="flex flex-col gap-4">
-      <TurnData />
+      <TurnData :state="gameStore.state" />
       <Chat class="grow" />
     </div>
     <Board :state="gameStore.state.G" class="rounded-xl overflow-hidden" />

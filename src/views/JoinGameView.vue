@@ -35,10 +35,6 @@ const checkIfBothReady = () => {
         playerID: store.playerID,
         credentials: store.playerCredentials,
       }).then(() => {
-        // Save playerIDm matchID and playerCredentials to localStorage
-        // localStorage.setItem('playerID', store.playerID)
-        // localStorage.setItem('matchID', store.matchID)
-        // localStorage.setItem('playerCredentials', store.playerCredentials)
         router.push('/game');
       })
     }
