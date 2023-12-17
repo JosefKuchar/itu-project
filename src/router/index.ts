@@ -5,6 +5,7 @@ import CreateLobbyView from '@/views/CreateLobbyView.vue'
 import PlayWithFriendView from '@/views/PlayWithFriendView.vue'
 import PlayPublicView from '@/views/PlayPublicView.vue'
 import PlayWithAi from '@/views/PlayWithAi.vue'
+import PlayLocal from '@/views/PlayLocal.vue'
 import JoinGameView from '@/views/JoinGameView.vue'
 import JoinFriendGameView from '@/views/JoinFriendGameView.vue'
 import ResultView from '@/views/ResultView.vue'
@@ -64,6 +65,11 @@ const router = createRouter({
       path: '/replay',
       name: 'replay',
       component: ReplayView
+    },
+    {
+      path: '/play-locally',
+      name: 'play-locally',
+      component: PlayLocal
     }
   ]
 })

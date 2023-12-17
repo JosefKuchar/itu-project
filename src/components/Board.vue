@@ -16,10 +16,12 @@ const gameStore = useGameStore()
 interface Props {
   state: GameState
   replay?: boolean
+  local?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  replay: false
+  replay: false,
+  local: false
 })
 
 const selectedPiece = ref<number | null>(null)
@@ -51,14 +53,18 @@ const pieces = computed(
 
 const validMoves = computed(() => {
   if (props.replay) return []
-  if (gameStore.state.ctx.currentPlayer !== store.playerID) return []
-  return getValidMoves(gameStore.state.G, store.playerID)
+  if (!props.local) {
+    if (gameStore.state.ctx.currentPlayer !== store.playerID) return []
+    return getValidMoves(gameStore.state.G, store.playerID)
+  }
+  return getValidMoves(gameStore.state.G, gameStore.state.ctx.currentPlayer)
 })
 
 const handleClick = (value: number) => {
   if (props.replay) return
-  if (gameStore.state.ctx.currentPlayer !== store.playerID) return
-
+  if (!props.local) {
+    if (gameStore.state.ctx.currentPlayer !== store.playerID) return
+  }
   if (selectedPiece.value === null) {
     if (!validMoves.value.some((move) => move.from === value)) return
     selectedPiece.value = value
@@ -220,28 +226,47 @@ const handleMouseMove = (e: any) => {
 <template>
   <div class="board rounded-xl overflow-hidden">
     <div class="grid" @mousemove="handleMouseMove" ref="board">
-      <div v-for="(_, index) in state.cells" :class="{
-        cell: true,
-        'cell-hover': isHovering(index),
-        'bg-gray-200': index % 2 === Math.floor(index / 8) % 2
-      }" :key="index" class="bg-gray-100" @click="handleClick(index)"></div>
-      <div v-for="cell in pieces" :key="cell.piece?.id" :style="{
-        transform: getTransform(cell.index),
-        zIndex: cell?.index === selectedPiece ? 5 : 1
-      }" :class="{ 'piece-wrapper': true, animated: dragCoords === null }"
-        @mousedown="handleMouseDown($event, cell.index)" @mouseup="handleMouseUp">
-        <div :class="{
-          piece: true,
-          'piece-white': cell?.piece?.player === Player.White,
-          'piece-black': cell?.piece?.player === Player.Black,
-          'piece-selected': cell?.index === selectedPiece,
-          'piece-movable': validMoves.some((move) => move.from === cell.index),
-          animated: true
-        }"></div>
+      <div
+        v-for="(_, index) in state.cells"
+        :class="{
+          cell: true,
+          'cell-hover': isHovering(index),
+          'bg-gray-200': index % 2 === Math.floor(index / 8) % 2
+        }"
+        :key="index"
+        class="bg-gray-100"
+        @click="handleClick(index)"
+      ></div>
+      <div
+        v-for="cell in pieces"
+        :key="cell.piece?.id"
+        :style="{
+          transform: getTransform(cell.index),
+          zIndex: cell?.index === selectedPiece ? 5 : 1
+        }"
+        :class="{ 'piece-wrapper': true, animated: dragCoords === null }"
+        @mousedown="handleMouseDown($event, cell.index)"
+        @mouseup="handleMouseUp"
+      >
+        <div
+          :class="{
+            piece: true,
+            'piece-white': cell?.piece?.player === Player.White,
+            'piece-black': cell?.piece?.player === Player.Black,
+            'piece-selected': cell?.index === selectedPiece,
+            'piece-movable': validMoves.some((move) => move.from === cell.index),
+            animated: true
+          }"
+        ></div>
       </div>
       <template v-if="selectedPiece !== null">
-        <div v-for="(valid, index) in validMoves.filter((move) => move.from === selectedPiece)" :key="index"
-          :style="`transform: ${getTransform(valid.to)}`" class="piece-wrapper animated" @click="handleClick(valid.to)">
+        <div
+          v-for="(valid, index) in validMoves.filter((move) => move.from === selectedPiece)"
+          :key="index"
+          :style="`transform: ${getTransform(valid.to)}`"
+          class="piece-wrapper animated"
+          @click="handleClick(valid.to)"
+        >
           <div class="piece piece-cue"></div>
         </div>
       </template>
