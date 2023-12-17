@@ -8,6 +8,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from '../store'
 import { useGameStore } from '../store/gameStore'
 import Chat from '../components/Chat.vue'
+import TurnData from '@/components/TurnData.vue'
 
 const store = useStore()
 const router = useRouter()
@@ -22,22 +23,19 @@ onMounted(() => {
     matchID: store.matchID,
   })
   gameStore.client.start()
+  gameStore.players = gameStore.client.matchData
+
   gameStore.unsubscribe = gameStore.client.subscribe((newState: any) => {
     if (newState == null) return
     const oldState = gameStore.state
     gameStore.state = newState
     gameStore.messages = gameStore.client.chatMessages
 
+    console.log(newState.ctx?.turn, oldState.ctx?.turn)
     // If its another turn, push to history 
     if (newState.ctx?.turn !== oldState.ctx?.turn) {
-      console.log('pice')
       gameStore.gameHistory.push(newState)
     }
-
-    // Persist the game history, for now
-    localStorage.setItem('gameHistory', JSON.stringify(gameStore.gameHistory))
-
-    console.log(gameStore.gameHistory)
 
     if (newState.ctx.gameover) {
       gameStore.winner = newState.ctx.gameover.winner
@@ -61,37 +59,7 @@ onUnmounted(() => {
 <template>
   <div v-if="gameStore.state" class="flex gap-4">
     <div class="flex flex-col gap-4">
-      <div class="p-4 bg-gray-100 rounded-xl flex flex-col gap-3">
-        <div class="flex justify-between">
-          <div class="text-lg font-bold">Game</div>
-          <div class="font-bold text-primary">{{ gameStore.state.ctx.currentPlayer === gameStore.client.playerID ?
-            "Your turn" : "Enemy turn"
-          }}
-          </div>
-        </div>
-        <div class="flex flex-col gap-1">
-          <div class="flex justify-between">
-            <div class="font-semibold text-sm">Game total</div>
-            <div class="font-semibold text-sm">{{ gameStore.gameElapsed }}</div>
-          </div>
-          <div class="flex justify-between">
-            <div class="font-semibold text-sm">Your turns</div>
-            <div class="font-semibold text-sm">{{ gameStore.clientElapsed }}</div>
-          </div>
-        </div>
-        <div class="flex flex-col gap-1">
-          <div v-for="player in gameStore.client.matchData" class="flex gap-2 items-center">
-            <div class="h-3 w-3 border rounded-full transition-all ease-in-out"
-              :class="gameStore.state.ctx.currentPlayer == player.id ? 'bg-gray-900 border-gray-900' : 'bg-transparent border-gray-400'">
-            </div>
-            <div class="font-semibold text-sm transition-all ease-in-out"
-              :class="gameStore.state.ctx.currentPlayer == player.id ? 'text-gray-900' : 'text-gray-600'">{{ player.name
-              }}
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <TurnData />
       <Chat class="grow" />
     </div>
     <Board :state="gameStore.state.G" class="rounded-xl overflow-hidden" />

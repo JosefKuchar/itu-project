@@ -29,9 +29,9 @@ const checkIfBothReady = () => {
         credentials: store.playerCredentials,
       }).then(() => {
         // Save playerIDm matchID and playerCredentials to localStorage
-        localStorage.setItem('playerID', store.playerID)
-        localStorage.setItem('matchID', store.matchID)
-        localStorage.setItem('playerCredentials', store.playerCredentials)
+        // localStorage.setItem('playerID', store.playerID)
+        // localStorage.setItem('matchID', store.matchID)
+        // localStorage.setItem('playerCredentials', store.playerCredentials)
         router.push('/game');
       })
     }
@@ -64,8 +64,9 @@ const changeJoinState = () => {
         {{ err }}
       </div>
     </div>
-    <input type="checkbox" aria-label="Ready" class="btn checked:!bg-secondary checked:!border-secondary btn-success gap-y-6"
-      @change="changeJoinState" v-bind:checked="!ready" v-bind:disabled="err != ''" />
+    <input type="checkbox" aria-label="Ready"
+      class="btn checked:!bg-secondary checked:!border-secondary btn-success gap-y-6" @change="changeJoinState"
+      v-bind:checked="!ready" v-bind:disabled="err != ''" />
     <p class="text-center text-sm">
       The game will start automatically when both players are ready
     </p>

@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { ref, computed, watch } from 'vue'
-import { useRouter } from "vue-router";
 import { type GameState } from "@/game";
 
 interface GameHistory {
@@ -18,6 +17,7 @@ export const useGameStore = defineStore('game', () => {
   const unsubscribe = ref()
   const state = ref()
   const messages = ref([])
+  const players = ref()
   const winner = ref()
 
   const gameHistory = ref<GameHistory[]>([])
@@ -47,7 +47,7 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function getPlayerName(id: string) {
-    return client.value.matchData.find((player: { id: string }) =>
+    return players.value.find((player: { id: string }) =>
       player.id == id
     )?.name;
   }
@@ -100,6 +100,7 @@ export const useGameStore = defineStore('game', () => {
     sendMessage,
     messages,
     winner,
-    gameHistory
+    gameHistory,
+    players
   }
 })
