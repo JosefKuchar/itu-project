@@ -9,6 +9,7 @@ import { computed, ref } from 'vue';
 import { useGameStore } from '@/store/gameStore';
 import { BackwardIcon, ForwardIcon, PlayPauseIcon } from '@heroicons/vue/24/solid'
 import TurnData from '@/components/TurnData.vue';
+import { onKeyStroke } from '@vueuse/core';
 
 const gameStore = useGameStore()
 
@@ -48,6 +49,10 @@ const toggleAuto = () => {
     clearInterval(autoplayInterval.value)
   }
 }
+
+onKeyStroke('ArrowLeft', prevStep)
+onKeyStroke('ArrowRight', nextStep)
+onKeyStroke('Enter', toggleAuto, { dedupe: true })
 </script>
 
 <template>
