@@ -7,15 +7,14 @@
 
 import { computed, ref } from 'vue'
 import { type Piece, type GameState, Player, getValidMoves, calculateIndex } from '../game'
-import type { Ctx } from 'boardgame.io'
 import { useStore } from '../store'
 import { useGameStore } from '../store/gameStore'
-import { BackwardIcon, ForwardIcon, PlayPauseIcon } from '@heroicons/vue/24/solid'
 
 const store = useStore()
 const gameStore = useGameStore()
 
 interface Props {
+  state: GameState
   replay: boolean
 }
 
@@ -42,20 +41,9 @@ const getTransform = (index?: number) => {
   return `translate(${x * 100}%, ${y * 100}%)`
 }
 
-const historyTurn = computed(() => gameStore.gameHistory[currentStep.value]?.ctx.turn)
-const currentStep = ref(0)
-
-const gameState = computed(() => {
-  if (props.replay) {
-    return gameStore.gameHistory[currentStep.value].G
-  } else {
-    return gameStore.state.G
-  }
-})
-
 const pieces = computed(
   () =>
-    (gameState.value as GameState)?.cells
+    (props.state as GameState)?.cells
       .map((piece, index) => ({ piece, index }))
       .filter((cell) => cell.piece !== null)
       .sort((a, b) => a.piece!.id! - b.piece!.id!) as { piece: Piece; index: number }[]
@@ -135,38 +123,6 @@ const handleMouseMove = (e: any) => {
     const cornerX = (rawX / board.value.offsetWidth) * 8
     const cornerY = (rawY / board.value.offsetWidth) * 8
     dragCoords.value = { x, y, cornerX, cornerY }
-  }
-}
-
-const nextStep = () => {
-  if (currentStep.value < gameStore.gameHistory.length - 1) {
-    currentStep.value++
-  }
-}
-
-const prevStep = () => {
-  if (currentStep.value > 0) {
-    currentStep.value--
-  }
-}
-
-const autoplay = ref(false)
-const autoplayInterval = ref<any>(null)
-
-const toggleAuto = () => {
-  autoplay.value = !autoplay.value
-  if (autoplay.value) {
-    autoplayInterval.value = setInterval(() => {
-      if (currentStep.value < gameStore.gameHistory.length - 1) {
-        currentStep.value++
-      } else {
-        clearInterval(autoplayInterval.value)
-        autoplay.value = false
-      }
-    }, 1000)
-  } else {
-    console.log('clearing interval')
-    clearInterval(autoplayInterval.value)
   }
 }
 </script>
@@ -264,72 +220,31 @@ const toggleAuto = () => {
 <template>
   <div class="board rounded-xl overflow-hidden">
     <div class="grid" @mousemove="handleMouseMove" ref="board">
-      <div
-        v-for="(_, index) in gameState.cells"
-        :class="{
-          cell: true,
-          'cell-hover': isHovering(index),
-          'bg-gray-200': index % 2 === Math.floor(index / 8) % 2
-        }"
-        :key="index"
-        class="bg-gray-100"
-        @click="handleClick(index)"
-      ></div>
-      <div
-        v-for="cell in pieces"
-        :key="cell.piece?.id"
-        :style="{
-          transform: getTransform(cell.index),
-          zIndex: cell?.index === selectedPiece ? 5 : 1
-        }"
-        :class="{ 'piece-wrapper': true, animated: dragCoords === null }"
-        @mousedown="handleMouseDown($event, cell.index)"
-        @mouseup="handleMouseUp"
-      >
-        <div
-          :class="{
-            piece: true,
-            'piece-white': cell?.piece?.player === Player.White,
-            'piece-black': cell?.piece?.player === Player.Black,
-            'piece-selected': cell?.index === selectedPiece,
-            'piece-movable': validMoves.some((move) => move.from === cell.index),
-            animated: true
-          }"
-        ></div>
+      <div v-for="(_, index) in state.cells" :class="{
+        cell: true,
+        'cell-hover': isHovering(index),
+        'bg-gray-200': index % 2 === Math.floor(index / 8) % 2
+      }" :key="index" class="bg-gray-100" @click="handleClick(index)"></div>
+      <div v-for="cell in pieces" :key="cell.piece?.id" :style="{
+        transform: getTransform(cell.index),
+        zIndex: cell?.index === selectedPiece ? 5 : 1
+      }" :class="{ 'piece-wrapper': true, animated: dragCoords === null }"
+        @mousedown="handleMouseDown($event, cell.index)" @mouseup="handleMouseUp">
+        <div :class="{
+          piece: true,
+          'piece-white': cell?.piece?.player === Player.White,
+          'piece-black': cell?.piece?.player === Player.Black,
+          'piece-selected': cell?.index === selectedPiece,
+          'piece-movable': validMoves.some((move) => move.from === cell.index),
+          animated: true
+        }"></div>
       </div>
       <template v-if="selectedPiece !== null">
-        <div
-          v-for="(valid, index) in validMoves.filter((move) => move.from === selectedPiece)"
-          :key="index"
-          :style="`transform: ${getTransform(valid.to)}`"
-          class="piece-wrapper animated"
-          @click="handleClick(valid.to)"
-        >
+        <div v-for="(valid, index) in validMoves.filter((move) => move.from === selectedPiece)" :key="index"
+          :style="`transform: ${getTransform(valid.to)}`" class="piece-wrapper animated" @click="handleClick(valid.to)">
           <div class="piece piece-cue"></div>
         </div>
       </template>
-    </div>
-  </div>
-  <div class="flex justify-between gap-2 mt-4" v-if="replay">
-    <div class="flex gap-2">
-      <RouterLink to="/">
-        <button class="btn btn-secondary">Exit</button>
-      </RouterLink>
-      <div class="flex items-center gap-1 px-4 border border-gray-400 rounded-xl">
-        <div class="font-semibold">Turn:</div>
-        <div>{{ historyTurn + '/' + (gameStore.gameHistory.length + 1) }}</div>
-      </div>
-    </div>
-    <div class="flex gap-2">
-      <button class="btn btn-secondary" @click="prevStep">
-        <BackwardIcon class="h-4 w-4"></BackwardIcon>
-      </button>
-      <button class="btn" :class="autoplay ? 'btn-primary' : 'btn-secondary'" @click="toggleAuto">
-        <PlayPauseIcon class="h-4 w-4"></PlayPauseIcon>
-      </button>
-      <button class="btn btn-secondary" @click="nextStep">
-        <ForwardIcon class="h-4 w-4"></ForwardIcon>
-      </button>
     </div>
   </div>
 </template>
