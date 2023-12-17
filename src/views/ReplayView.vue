@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+/**
+ * Replay view
+ *
+ * @author Šimon Benčík (xbenci01)
+ */
 import Board from '@/components/Board.vue';
 import { computed, ref } from 'vue';
 import { useGameStore } from '@/store/gameStore';
@@ -7,9 +12,11 @@ import TurnData from '@/components/TurnData.vue';
 
 const gameStore = useGameStore()
 
+// History step
 const historyTurn = computed(() => gameStore.gameHistory[currentStep.value]?.ctx.turn)
 const currentStep = ref(0)
 
+// History navigation
 const nextStep = () => {
   if (currentStep.value < gameStore.gameHistory.length - 1) {
     currentStep.value++
@@ -25,6 +32,7 @@ const prevStep = () => {
 const autoplay = ref(false)
 const autoplayInterval = ref<any>(null)
 
+// Autoplay
 const toggleAuto = () => {
   autoplay.value = !autoplay.value
   if (autoplay.value) {

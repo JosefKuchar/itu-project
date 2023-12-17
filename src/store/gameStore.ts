@@ -1,3 +1,9 @@
+/**
+ * Game info store
+ *
+ * @author Šimon Benčík (xbenci01)
+ */
+
 import { defineStore } from "pinia";
 import { ref, computed, watch } from 'vue'
 import { type GameState } from "@/game";
@@ -22,18 +28,21 @@ export const useGameStore = defineStore('game', () => {
 
   const gameHistory = ref<GameHistory[]>([])
 
+  // Compute client elapsed time
   const clientElapsed = computed(() => {
     const minutes = Math.floor(clientElapsedSeconds.value / 60)
     const seconds = clientElapsedSeconds.value % 60
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
   })
 
+  // Compute game elapsed time
   const gameElapsed = computed(() => {
     const minutes = Math.floor(gameElapsedSeconds.value / 60)
     const seconds = gameElapsedSeconds.value % 60
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
   })
 
+  // Update time - callback for setInterval
   const updateTime = () => {
     // Game time
     gameElapsedSeconds.value++
@@ -42,14 +51,19 @@ export const useGameStore = defineStore('game', () => {
     if (client.value.playerID == state.value.ctx.currentPlayer) {
       clientElapsedSeconds.value++
     }
+
+    // Save game info
+    save()
   }
 
+  // Helper function to get player name from ID
   function getPlayerName(id: string) {
     return players.value.find((player: { id: string }) =>
       player.id == id
     )?.name;
   }
 
+  // Helper function to get time from timestamp
   const getTime = (time: number) => {
     const date = new Date(time);
     // Add leading zero to minutes
@@ -59,6 +73,7 @@ export const useGameStore = defineStore('game', () => {
     return `${date.getHours()}:${date.getMinutes()}`;
   }
 
+  // Helper function to send chat message
   function sendMessage(input: string) {
     client.value.sendChatMessage({
       message: input,
@@ -66,25 +81,23 @@ export const useGameStore = defineStore('game', () => {
     });
   }
 
-  // Persist start of game and client elapsed time
+  // Persist times and game history - if realoaded, the game will continue
   const save = () => {
     localStorage.setItem('gameElapsedSeconds', String(gameElapsedSeconds.value))
     localStorage.setItem('clientElapsedSeconds', String(clientElapsedSeconds.value))
     localStorage.setItem('gameHistory', JSON.stringify(gameHistory.value))
   }
 
-  // Load start of game and client elapsed time
+  // Load from local storage
   const load = () => {
     gameElapsedSeconds.value = Number(localStorage.getItem('gameElapsedSeconds'))
     clientElapsedSeconds.value = Number(localStorage.getItem('clientElapsedSeconds'))
     gameHistory.value = JSON.parse(localStorage.getItem('gameHistory') || '[]')
   }
 
-  watch(gameElapsedSeconds, () => {
-    save()
-  })
-
+  // Load on mount
   load()
+
   return {
     gameElapsedSeconds,
     clientElapsedSeconds,

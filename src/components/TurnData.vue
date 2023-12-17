@@ -1,17 +1,21 @@
 <script setup lang="ts">
+/**
+ * Turn and game information component
+ *
+ * @author Šimon Benčík (xbenci01)
+ */
+
 import { useGameStore } from '@/store/gameStore';
 const gameStore = useGameStore()
-import { type GameState } from '@/game';
 
 interface Props {
   state: any
-  replay: boolean
+  replay?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   replay: false
 })
-
 </script>
 
 <template>

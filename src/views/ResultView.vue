@@ -1,6 +1,11 @@
 <script lang="ts" setup>
+/**
+ * Result view
+ *
+ * @author Šimon Benčík (xbenci01)
+ */
+
 import logo from '@/assets/logo.png';
-import { useRoute } from 'vue-router';
 import { useGameStore } from '../store/gameStore';
 
 const gameStore = useGameStore();
