@@ -49,7 +49,6 @@ onUnmounted(() => {
 
 <template>
   <div v-if="gameStore.state" class="flex flex-col gap-4">
-    <TurnData :state="gameStore.state"></TurnData>
     <Board local :state="gameStore.state.G" class="rounded-xl overflow-hidden" />
   </div>
   <p v-else>loading...</p>
