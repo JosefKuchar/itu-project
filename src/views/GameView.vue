@@ -94,7 +94,7 @@ onUnmounted(() => {
 
       <Chat class="grow" />
     </div>
-    <Board class="rounded-xl overflow-hidden" />
+    <Board :state="gameStore.state.G" class="rounded-xl overflow-hidden" />
   </div>
   <p v-else>loading...</p>
 </template>

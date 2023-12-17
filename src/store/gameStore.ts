@@ -1,8 +1,14 @@
 import { defineStore } from "pinia";
 import { ref, computed, watch } from 'vue'
 import { useRouter } from "vue-router";
+import { type GameState } from "@/game";
 
-const router = useRouter()
+interface GameHistory {
+  G: GameState
+  ctx: {
+    turn: number
+  }
+}
 
 export const useGameStore = defineStore('game', () => {
   const gameInterval = ref();
@@ -14,7 +20,7 @@ export const useGameStore = defineStore('game', () => {
   const messages = ref([])
   const winner = ref()
 
-  const gameHistory = ref([])
+  const gameHistory = ref<GameHistory[]>([])
 
   const testCount = ref(0)
 

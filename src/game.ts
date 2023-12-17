@@ -8,7 +8,7 @@ import type { Game } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
 // Piece type
-enum PieceType {
+export enum PieceType {
   Pawn,
   King
 }
