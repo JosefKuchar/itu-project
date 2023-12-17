@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/**
+ * @author Matej Sirovatka (xsirov00)
+ */
 import { ref } from 'vue';
 import { useClipboard } from '@vueuse/core'
 

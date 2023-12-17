@@ -1,5 +1,9 @@
 <script setup lang="ts">
 
+/**
+ * @author Matej Sirovatka (xsirov00)
+ */
+
 import { useStore } from '@/store';
 import { onMounted, onUnmounted, ref } from 'vue';
 import router from "@/router";

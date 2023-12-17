@@ -1,5 +1,8 @@
 
 <script setup lang="ts">
+/**
+ * @author Matej Sirovatka (xsirov00)
+ */
 
 import CreateLobby from "@/components/CreateLobby.vue";
 import HalfDisabledInput from "@/components/HalfDisabledInput.vue";

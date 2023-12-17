@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/**
+ * @Author Matej Sirovatka (xsirov00)
+ */
 import { type LobbyAPI } from 'boardgame.io'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useStore } from '../store'

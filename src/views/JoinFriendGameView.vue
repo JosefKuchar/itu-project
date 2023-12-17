@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/**
+ * @author Matej Sirovatka (xsirov00)
+ */
 import { useRoute, useRouter } from 'vue-router';
 import {useStore} from "@/store";
 import {ref} from "vue";
