@@ -33,6 +33,11 @@ store.playerID = store.playerCredentials = store.matchID = store.playerName = st
 gameStore.messages = gameStore.players = gameStore.winner = null
 gameStore.gameElapsedSeconds = gameStore.clientElapsedSeconds = 0
 gameStore.gameHistory = []
+
+// Also clear local storage
+localStorage.removeItem('gameElapsedSeconds')
+localStorage.removeItem('clientElapsedSeconds')
+localStorage.removeItem('gameHistory')
 </script>
 
 <template>
