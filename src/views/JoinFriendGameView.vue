@@ -10,7 +10,6 @@ const gameIdParam = route.params.id;
 
 const err = ref('');
 
-//TODO: check if game is full
 store.lobbyClient.listMatches('checkers').then((m) => {
   const game = m.matches.find((match) => match.setupData.lobbyIdentifier === gameIdParam);
   if (game) {
@@ -29,6 +28,8 @@ store.lobbyClient.listMatches('checkers').then((m) => {
         playerID: c.playerID,
       })
       router.push('/join-game');
+    }).catch(() => {
+      err.value = "Failed to join game";
     })
 
   } else {
@@ -38,5 +39,5 @@ store.lobbyClient.listMatches('checkers').then((m) => {
 </script>
 
 <template>
-  {{ err }}
+  <h2 class='text-2xl text-center'>There was an error...<br>{{ err }}</h2>
 </template>
