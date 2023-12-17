@@ -7,15 +7,19 @@ import { useRouter } from 'vue-router'
 import { useGameStore } from '../store/gameStore'
 import { Step, MCTSBot } from 'boardgame.io/ai'
 import TurnData from '@/components/TurnData.vue'
+import { useStore } from '../store'
 
 const router = useRouter()
 const gameStore = useGameStore()
 const bot = ref()
+const store = useStore()
 
 onMounted(() => {
+  store.playerID = '0'
   gameStore.client = Client({
     game: Checkers,
-    debug: false
+    debug: false,
+    playerID: '0'
   })
   gameStore.client.start()
   bot.value = new MCTSBot({
@@ -34,11 +38,6 @@ onMounted(() => {
     //   console.log('pice')
     //   gameStore.gameHistory.push(newState)
     // }
-
-    // // Persist the game history, for now
-    // localStorage.setItem('gameHistory', JSON.stringify(gameStore.gameHistory))
-
-    console.log(gameStore.gameHistory)
 
     if (newState.ctx.gameover) {
       gameStore.winner = newState.ctx.gameover.winner
